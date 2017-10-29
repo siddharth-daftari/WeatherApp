@@ -17,8 +17,8 @@ import java.util.Set;
 
 public class DefaultList {
 
-    public static void receiveContext(Context c) {
-        SharedPreferences sharedPref = c.getSharedPreferences("temp",Context.MODE_PRIVATE);
+    public static void writetoSharedInitial(Context c) {
+        SharedPreferences sharedPref = c.getSharedPreferences("weathercities",Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
        editor.putStringSet("citieslist",citiesset);
         editor.apply();
@@ -30,16 +30,20 @@ public class DefaultList {
         for (String s: returnedset) {
             //for each city string in return set, construct a cityItem PoJo and add to the static list.
             String [] citydetails = s.split("@");
+            Log.i("Apoorv", "Got a city from database, adding it to the list");
             CityItem city1 = new CityItem(citydetails[0],citydetails[1],citydetails[2],citydetails[3],citydetails[4],citydetails[5]);
             addItem(city1);
         }
 
         //check if we have cities. If not, add the default sity to sharedContext and to the List.
         if(LISTPLACES.size() == 0) {
-
-
+            Log.i("Apoorv", "No city database, adding default to the list");
+            citiesset.add(defaultCities[0]);
+            DefaultList.writetoSharedInitial(c);
+            String[] citydetails = defaultCities[0].split("@");
+            CityItem city1 = new CityItem(citydetails[0],citydetails[1],citydetails[2],citydetails[3],citydetails[4],citydetails[5]);
+            addItem(city1);
         }
-
 
     }
 
