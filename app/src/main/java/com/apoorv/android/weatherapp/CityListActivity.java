@@ -168,6 +168,7 @@ public class CityListActivity extends AppCompatActivity {
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
         private final List<DefaultList.CityItem> mValues;
+        private Context context;
 
         public SimpleItemRecyclerViewAdapter(List<DefaultList.CityItem> items) {
             Collections.sort(items);
@@ -180,6 +181,7 @@ public class CityListActivity extends AppCompatActivity {
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.city_list_content, parent, false);
+            context = parent.getContext();
             return new ViewHolder(view);
         }
 
@@ -221,7 +223,10 @@ public class CityListActivity extends AppCompatActivity {
         //Delete with Swipe
 
         public void deleteCityWithSwipe (int position) {
+            DefaultList.deleteCity(position,this.context);
             mValues.remove(position);
+           Log.i("Apoorv","Size of arrayList after mValue removal"+DefaultList.LISTPLACES.size());
+
             this.notifyItemRemoved(position);
         }
 

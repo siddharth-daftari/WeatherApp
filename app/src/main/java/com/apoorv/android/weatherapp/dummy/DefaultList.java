@@ -23,6 +23,7 @@ public class DefaultList {
     public static void writetoSharedInitial(Context c) {
         SharedPreferences sharedPref = c.getSharedPreferences("weathercities",Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
+        Log.i("Apoorv","Writing to database size"+citiesset.size());
        editor.putStringSet("citieslist",citiesset);
         editor.apply();
     }
@@ -79,6 +80,16 @@ public class DefaultList {
 
     private static void addItem(DefaultList.CityItem item) {
         LISTPLACES.add(item);
+    }
+
+    public static void deleteCity(int position, Context context) {
+
+        CityItem cityToBeRemoved = LISTPLACES.get(position);
+        Log.i("Apoorv", "Will delete from Database"+cityToBeRemoved.getDelimitedString());
+        Log.i("Apoorv","Set size before delete"+citiesset.size());
+        citiesset.remove(cityToBeRemoved.getDelimitedString());
+        Log.i("Apoorv","Set size after delete"+citiesset.size());
+        writetoSharedInitial(context);
     }
 
 //    static {
