@@ -2,7 +2,10 @@ package com.apoorv.android.weatherapp.dummy;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
 import android.util.Log;
+
+import com.google.android.gms.location.places.Place;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,6 +37,7 @@ public class DefaultList {
             Log.i("Apoorv", "Got a city from database, adding it to the list");
             CityItem city1 = new CityItem(citydetails[0],citydetails[1],citydetails[2],citydetails[3],citydetails[4],citydetails[5]);
             addItem(city1);
+            citiesset.add(city1.getDelimitedString());
         }
 
         //check if we have cities. If not, add the default sity to sharedContext and to the List.
@@ -46,6 +50,23 @@ public class DefaultList {
             addItem(city1);
         }
 
+    }
+
+    public static boolean addCity (Place selectedPlace,Context c) {
+        if(selectedPlace!=null) {
+
+            for(CityItem city : LISTPLACES)
+            {
+                Log.i("Apoorv list",city.getDelimitedString());
+            }
+
+            CityItem selectedCity = new CityItem(String.valueOf(LISTPLACES.size()+1),selectedPlace.getName().toString(),selectedPlace.getAddress().toString(),String.valueOf(selectedPlace.getLatLng().latitude),String.valueOf(selectedPlace.getLatLng().longitude),Boolean.toString(false));
+            citiesset.add(selectedCity.getDelimitedString());
+            DefaultList.writetoSharedInitial(c);
+            addItem(selectedCity);
+            return true;
+        }
+        return false;
     }
 
     public static String[] defaultCities = {"1@San Jose@CA, United States@37.338208@-121.886329@true","2@Mumbai@Maharashtra, India@19.075984@72.877656@false"};
@@ -75,7 +96,7 @@ public class DefaultList {
     /**
      * A City item Pojo representing a piece of content.
      */
-    public static class CityItem {
+    public static class CityItem implements  Comparable<CityItem> {
         public final String id;
         public final String name;
         public final String description;
@@ -100,6 +121,12 @@ public class DefaultList {
         public String getDelimitedString() {
             return id+"@"+name+"@"+description+"@"+latitude+"@"+longitude+"@"+isCurrent;
         }
+
+        @Override
+        public int compareTo(CityItem newcity) {
+            return Integer.parseInt(this.id) - Integer.parseInt(newcity.id);
+        }
+
 
     }
 
