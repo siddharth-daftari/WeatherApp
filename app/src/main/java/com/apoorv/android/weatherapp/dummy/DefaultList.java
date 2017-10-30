@@ -27,6 +27,7 @@ public class DefaultList {
     public static void readFromSharedInitial (Context c) {
         SharedPreferences sharedPref = c.getSharedPreferences("weathercities",Context.MODE_PRIVATE);
         Set<String> returnedset = sharedPref.getStringSet("citieslist", Collections.EMPTY_SET);
+        LISTPLACES.clear();
         for (String s: returnedset) {
             //for each city string in return set, construct a cityItem PoJo and add to the static list.
             String [] citydetails = s.split("@");
