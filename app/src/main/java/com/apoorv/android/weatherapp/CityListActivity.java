@@ -1,16 +1,22 @@
 package com.apoorv.android.weatherapp;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Canvas;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.util.SortedList;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,6 +28,7 @@ import android.widget.Toast;
 
 import com.apoorv.android.weatherapp.dummy.DefaultList;
 import com.apoorv.android.weatherapp.dummy.DummyContent;
+import com.apoorv.android.weatherapp.mSwiper.SwipeHelper;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
@@ -84,6 +91,11 @@ public class CityListActivity extends AppCompatActivity {
         this.cityListAdapter = new SimpleItemRecyclerViewAdapter(DefaultList.LISTPLACES);
         setupRecyclerView((RecyclerView) recyclerView);
 
+        //Swipe Delete code
+        ItemTouchHelper.Callback callback = new SwipeHelper(this.cityListAdapter);
+        ItemTouchHelper helper = new ItemTouchHelper(callback);
+        helper.attachToRecyclerView((RecyclerView) recyclerView);
+
         PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
 
@@ -145,6 +157,13 @@ public class CityListActivity extends AppCompatActivity {
         recyclerView.setAdapter(this.cityListAdapter);
     }
 
+
+
+    // Adapter Class
+    //
+    //
+
+
     public class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
@@ -154,6 +173,8 @@ public class CityListActivity extends AppCompatActivity {
             Collections.sort(items);
             mValues = items;
         }
+
+
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -188,6 +209,8 @@ public class CityListActivity extends AppCompatActivity {
                     }
                 }
             });
+
+
         }
 
         @Override
@@ -195,7 +218,15 @@ public class CityListActivity extends AppCompatActivity {
             return mValues.size();
         }
 
-        public class ViewHolder extends RecyclerView.ViewHolder {
+        //Delete with Swipe
+
+        public void deleteCityWithSwipe (int position) {
+            mValues.remove(position);
+            this.notifyItemRemoved(position);
+        }
+
+
+        public class ViewHolder extends RecyclerView.ViewHolder  {
             public final View mView;
             public final TextView mIdView;
             public final TextView mContentView;
@@ -206,12 +237,15 @@ public class CityListActivity extends AppCompatActivity {
                 mView = view;
                 mIdView = (TextView) view.findViewById(R.id.id);
                 mContentView = (TextView) view.findViewById(R.id.content);
+
             }
 
             @Override
             public String toString() {
                 return super.toString() + " '" + mContentView.getText() + "'";
             }
+
+
         }
     }
 }
