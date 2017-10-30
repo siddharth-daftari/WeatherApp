@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.util.SortedList;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.design.widget.FloatingActionButton;
@@ -12,6 +13,7 @@ import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -26,6 +28,7 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -46,6 +49,8 @@ public class CityListActivity extends AppCompatActivity {
      * device.
      */
     private boolean mTwoPane;
+    private Place selectedPlace;
+    SimpleItemRecyclerViewAdapter cityListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,8 +78,10 @@ public class CityListActivity extends AppCompatActivity {
 
 
 
+
         View recyclerView = findViewById(R.id.city_list);
         assert recyclerView != null;
+        this.cityListAdapter = new SimpleItemRecyclerViewAdapter(DefaultList.LISTPLACES);
         setupRecyclerView((RecyclerView) recyclerView);
 
         PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
@@ -91,6 +98,7 @@ public class CityListActivity extends AppCompatActivity {
                 // TODO: Get info about the selected place.
                 Log.i("Apoorv", "Place: " + place.getName());
                 Log.i("Place","Place Name: "+place.getLatLng().latitude);
+                selectedPlace = place;
             }
 
             @Override
@@ -119,9 +127,22 @@ public class CityListActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.add_city_button:
+               Boolean cityAdded =  DefaultList.addCity(selectedPlace,this);
+                if (cityAdded) cityListAdapter.notifyDataSetChanged();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+    }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(DefaultList.LISTPLACES));
+        recyclerView.setAdapter(this.cityListAdapter);
     }
 
     public class SimpleItemRecyclerViewAdapter
@@ -130,6 +151,7 @@ public class CityListActivity extends AppCompatActivity {
         private final List<DefaultList.CityItem> mValues;
 
         public SimpleItemRecyclerViewAdapter(List<DefaultList.CityItem> items) {
+            Collections.sort(items);
             mValues = items;
         }
 
