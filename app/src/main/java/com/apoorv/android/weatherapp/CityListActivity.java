@@ -184,8 +184,12 @@ import butterknife.ButterKnife;
 
     @Override
     protected void onDestroy() {
-        mBackgroundHandler.removeMessages(START_API_MSG);
-        mBackgroundHandler.getLooper().quit();
+        if(mBackgroundHandler != null) {
+            mBackgroundHandler.removeMessages(START_API_MSG);
+            if(mBackgroundHandler.getLooper()!= null) {
+                mBackgroundHandler.getLooper().quit();
+            }
+        }
         super.onDestroy();
     }
 
