@@ -68,42 +68,6 @@ public class DefaultList {
 
     }
 
-    public class MyThread extends Thread{
-
-        Place selectedPlace = null;
-        Context c = null;
-        HashMap timeDetails = null;
-
-        public  MyThread(Place selectedPlace, Context c){
-            this.selectedPlace = selectedPlace;
-            this.c = c;
-        }
-
-        public HashMap getTimeDetails(){
-            return timeDetails;
-        }
-
-        public void run (){
-            //critical part: start
-            try {
-                Looper.prepare();
-                timeDetails = GetTimeZone.getTimeDetails(String.valueOf(selectedPlace.getLatLng().latitude),String.valueOf(selectedPlace.getLatLng().longitude));
-                //timeDetails = mt.getTimeDetails();
-                CityItem selectedCity = new CityItem(String.valueOf(LISTPLACES.size()+1),selectedPlace.getName().toString(),selectedPlace.getAddress().toString(),String.valueOf(selectedPlace.getLatLng().latitude),String.valueOf(selectedPlace.getLatLng().longitude),Boolean.toString(false),timeDetails.get(Constants.TIMEZONE_API_PROP_TIMEZONE_ID).toString());
-                citiesset.add(selectedCity.getDelimitedString());
-                DefaultList.writetoSharedInitial(c);
-                addItem(selectedCity);
-
-                Toast.makeText(c, "City added", Toast.LENGTH_SHORT);
-
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            //critical part: end
-        }
-    }
-
     public boolean addCity (Place selectedPlace, Context c) throws JSONException {
         if(selectedPlace!=null) {
             HashMap timeDetails = null;
@@ -113,9 +77,13 @@ public class DefaultList {
                 Log.i("Apoorv list",city.getDelimitedString());
             }
 
-            MyThread mt = new MyThread( selectedPlace,  c);
+            timeDetails = GetTimeZone.getTimeDetails(String.valueOf(selectedPlace.getLatLng().latitude),String.valueOf(selectedPlace.getLatLng().longitude));
+            //timeDetails = mt.getTimeDetails();
+            CityItem selectedCity = new CityItem(String.valueOf(LISTPLACES.size()+1),selectedPlace.getName().toString(),selectedPlace.getAddress().toString(),String.valueOf(selectedPlace.getLatLng().latitude),String.valueOf(selectedPlace.getLatLng().longitude),Boolean.toString(false),timeDetails.get(Constants.TIMEZONE_API_PROP_TIMEZONE_ID).toString());
+            citiesset.add(selectedCity.getDelimitedString());
+            DefaultList.writetoSharedInitial(c);
+            addItem(selectedCity);
 
-            mt.start();
             return true;
         }
         return false;

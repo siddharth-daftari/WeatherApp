@@ -1,30 +1,25 @@
 package com.apoorv.android.weatherapp;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Canvas;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.util.SortedList;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.os.Handler;
+import android.os.Message;
 import android.widget.Toast;
-
 
 import com.apoorv.android.weatherapp.dummy.DefaultList;
 import com.apoorv.android.weatherapp.dummy.DummyContent;
@@ -43,7 +38,6 @@ import java.util.List;
 import java.util.Set;
 
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * An activity representing a list of Cities. This activity
@@ -61,7 +55,12 @@ import butterknife.OnClick;
      */
     private boolean mTwoPane;
     private Place selectedPlace;
-    public static SimpleItemRecyclerViewAdapter cityListAdapter;
+    public SimpleItemRecyclerViewAdapter cityListAdapter;
+    private Handler mBackgroundHandler;
+    private Handler mForegroundHandler;
+    private boolean mPaused = false;
+    private static final int START_API_MSG = 101;
+    private static final int FIN_API_MSG = 303;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,23 +142,73 @@ import butterknife.OnClick;
 
     }
 
+    private void startAdding(Place place) {
+        mForegroundHandler.obtainMessage(FIN_API_MSG, false).sendToTarget();
+        try {
+            new DefaultList().addCity(selectedPlace,getApplicationContext());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        mForegroundHandler.obtainMessage(FIN_API_MSG, true).sendToTarget();
+    }
+
+    class TimeZoneCallback implements Handler.Callback {
+
+        @Override
+        public boolean handleMessage(Message msg) {
+            switch (msg.what) {
+                case START_API_MSG:
+                    startAdding((Place) msg.obj);
+                    break;
+                case FIN_API_MSG:
+                    if (!mPaused) {
+                        cityListAdapter.notifyDataSetChanged();
+                    }
+                    break;
+            }
+            return true;
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mPaused = false;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mPaused = true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        mBackgroundHandler.removeMessages(START_API_MSG);
+        mBackgroundHandler.getLooper().quit();
+        super.onDestroy();
+    }
 
     //Settings Menu
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        HandlerThread handlerThread = new HandlerThread("BackgroundThread");
+        handlerThread.start();
+        TimeZoneCallback timeZoneCallback = new TimeZoneCallback();
+        mBackgroundHandler = new Handler(handlerThread.getLooper(), timeZoneCallback);
+        mForegroundHandler = new Handler(timeZoneCallback);
+
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.add_city_button:
                 Boolean cityAdded = null;
 
                 try {
-                    cityAdded = new DefaultList().addCity(selectedPlace,this);
-                } catch (JSONException e) {
+                    mBackgroundHandler.obtainMessage(START_API_MSG).sendToTarget();
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 
-                if (cityAdded)
-                    cityListAdapter.notifyDataSetChanged();
                 return true;
             case R.id.toggleUnits:
                 SettingsPreference.toggleUnits();
