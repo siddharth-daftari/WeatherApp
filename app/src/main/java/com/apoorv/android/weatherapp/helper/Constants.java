@@ -28,4 +28,7 @@ public class Constants {
     public static final String FORECAST_WEATHER_API_PROP_LIST_MAIN_TEMP_MAX = "temp_max";
     public static final String FORECAST_WEATHER_API_PROP_LIST_WEATHER = "weather";
     public static final String FORECAST_WEATHER_API_PROP_LIST_WEATHER_MAIN = "main";
+
+    public static final String TEMPERATURE_UNIT_CELSIUS = "Celsius";
+    public static final String TEMPERATURE_UNIT_FARENHEIT = "Farenheit";
 }

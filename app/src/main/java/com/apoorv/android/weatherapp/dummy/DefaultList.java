@@ -7,6 +7,7 @@ import android.util.Log;
 import com.apoorv.android.weatherapp.CityListActivity;
 import com.apoorv.android.weatherapp.helper.Constants;
 import com.apoorv.android.weatherapp.helper.GetTimeZone;
+import com.apoorv.android.weatherapp.helper.SettingsPreference;
 import com.google.android.gms.location.places.Place;
 
 import org.json.JSONException;
