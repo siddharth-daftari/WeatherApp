@@ -13,6 +13,7 @@
             android:name=".CityListActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
+            <uses-permission android:name="android.permission.INTERNET" />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,6 +25,7 @@
             android:label="@string/title_city_detail"
             android:parentActivityName=".CityListActivity"
             android:theme="@style/AppTheme.NoActionBar">
+            <uses-permission android:name="android.permission.INTERNET" />
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.apoorv.android.weatherapp.CityListActivity" />

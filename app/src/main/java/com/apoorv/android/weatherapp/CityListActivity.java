@@ -35,6 +35,8 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 
+import org.json.JSONException;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -49,7 +51,7 @@ import butterknife.OnClick;
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
-public class CityListActivity extends AppCompatActivity {
+ public  class  CityListActivity extends AppCompatActivity {
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -57,7 +59,7 @@ public class CityListActivity extends AppCompatActivity {
      */
     private boolean mTwoPane;
     private Place selectedPlace;
-    SimpleItemRecyclerViewAdapter cityListAdapter;
+    public static SimpleItemRecyclerViewAdapter cityListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,13 +146,25 @@ public class CityListActivity extends AppCompatActivity {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.add_city_button:
-               Boolean cityAdded =  DefaultList.addCity(selectedPlace,this);
-                if (cityAdded) cityListAdapter.notifyDataSetChanged();
+                Boolean cityAdded = null;
+
+                try {
+                    cityAdded = new DefaultList().addCity(selectedPlace,this);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                if (cityAdded)
+                    cityListAdapter.notifyDataSetChanged();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
 
+    }
+
+    public SimpleItemRecyclerViewAdapter getCityListAdapter(){
+        return cityListAdapter;
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
