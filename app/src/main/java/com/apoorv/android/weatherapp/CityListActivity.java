@@ -22,6 +22,8 @@ import android.os.Message;
 import android.widget.Toast;
 
 import com.apoorv.android.weatherapp.dummy.DefaultList;
+import com.apoorv.android.weatherapp.dummy.DummyContent;
+import com.apoorv.android.weatherapp.helper.SettingsPreference;
 import com.apoorv.android.weatherapp.mSwiper.SwipeHelper;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.AutocompleteFilter;
@@ -33,6 +35,7 @@ import org.json.JSONException;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import butterknife.ButterKnife;
 
@@ -134,8 +137,8 @@ import butterknife.ButterKnife;
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.listmenu,menu);
+            menu.findItem(R.id.toggleUnits).setTitle(SettingsPreference.getToggleLabel());
         return true;
-
 
     }
 
@@ -186,6 +189,7 @@ import butterknife.ButterKnife;
         super.onDestroy();
     }
 
+    //Settings Menu
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         HandlerThread handlerThread = new HandlerThread("BackgroundThread");
@@ -206,6 +210,10 @@ import butterknife.ButterKnife;
                 }
 
                 return true;
+            case R.id.toggleUnits:
+                SettingsPreference.toggleUnits();
+                item.setTitle(SettingsPreference.getToggleLabel());
+
             default:
                 return super.onOptionsItemSelected(item);
         }

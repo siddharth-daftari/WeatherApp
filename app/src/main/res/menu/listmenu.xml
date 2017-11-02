@@ -6,5 +6,9 @@
         android:icon="@android:drawable/ic_input_add"
         android:title="Add City"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/toggleUnits"
+        android:title="Toggle Unit"
+        />
 
 </menu>
