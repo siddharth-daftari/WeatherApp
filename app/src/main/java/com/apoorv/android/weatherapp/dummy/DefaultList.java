@@ -11,12 +11,16 @@ import com.google.android.gms.location.places.Place;
 
 import org.json.JSONException;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TimeZone;
 
 import android.os.Handler;
 import android.os.Message;
@@ -174,7 +178,18 @@ public class DefaultList {
 
         @Override
         public String toString() {
-            return name+", "+description+", "+timeZone;
+
+
+            return name+", "+getListViewString(name,timeZone);
+        }
+
+        public String getListViewString(String name, String timeZoneid) {
+            SimpleDateFormat df = new SimpleDateFormat();
+            df.setTimeZone(TimeZone.getTimeZone(timeZoneid));
+            Date date = new Date();
+            Log.i("Apoorv","Time at " +name+" is: " + new Date(df.format(date)));
+            df.applyPattern("h:mm a");
+            return df.format(date);
         }
 
         public String getDelimitedString() {
