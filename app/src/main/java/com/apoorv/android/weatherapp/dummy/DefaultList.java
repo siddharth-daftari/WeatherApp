@@ -51,7 +51,7 @@ public class DefaultList {
         for (String s: returnedset) {
             //for each city string in return set, construct a cityItem PoJo and add to the static list.
             String [] citydetails = s.split("@");
-            CityItem city1 = new CityItem(citydetails[0],citydetails[1],citydetails[2],citydetails[3],citydetails[4],citydetails[5],citydetails[6]);
+            CityItem city1 = new CityItem(citydetails[0],citydetails[1],citydetails[2],citydetails[3],citydetails[4],citydetails[5],citydetails[6],citydetails[7]);
             if(id.equalsIgnoreCase(city1.id)){
                 cityItem = city1;
             }
@@ -68,8 +68,8 @@ public class DefaultList {
             //for each city string in return set, construct a cityItem PoJo and add to the static list.
             String [] citydetails = s.split("@");
             Log.i("Apoorv", "Got a city from database, adding it to the list");
-            System.out.println(citydetails[0]+citydetails[1]+citydetails[2]+citydetails[3]+citydetails[4]+citydetails[5]);
-            CityItem city1 = new CityItem(citydetails[0],citydetails[1],citydetails[2],citydetails[3],citydetails[4],citydetails[5],citydetails[6]);
+            System.out.println(citydetails[7]);
+            CityItem city1 = new CityItem(citydetails[0],citydetails[1],citydetails[2],citydetails[3],citydetails[4],citydetails[5],citydetails[6],citydetails[7]);
             addItem(city1);
             citiesset.add(city1.getDelimitedString());
         }
@@ -80,13 +80,13 @@ public class DefaultList {
             citiesset.add(defaultCities[0]);
             DefaultList.writetoSharedInitial(c);
             String[] citydetails = defaultCities[0].split("@");
-            CityItem city1 = new CityItem(citydetails[0],citydetails[1],citydetails[2],citydetails[3],citydetails[4],citydetails[5],citydetails[6]);
+            CityItem city1 = new CityItem(citydetails[0],citydetails[1],citydetails[2],citydetails[3],citydetails[4],citydetails[5],citydetails[6],citydetails[7]);
             addItem(city1);
         }
 
     }
 
-    public boolean addCity (Place selectedPlace, Context c) throws JSONException {
+    public static boolean addCity (Place selectedPlace, Context c) throws JSONException {
         if(selectedPlace!=null) {
             HashMap timeDetails = null;
 
@@ -97,17 +97,34 @@ public class DefaultList {
 
             timeDetails = GetTimeZone.getTimeDetails(String.valueOf(selectedPlace.getLatLng().latitude),String.valueOf(selectedPlace.getLatLng().longitude));
             //timeDetails = mt.getTimeDetails();
-            CityItem selectedCity = new CityItem(String.valueOf(LISTPLACES.size()+1),selectedPlace.getName().toString(),selectedPlace.getAddress().toString(),String.valueOf(selectedPlace.getLatLng().latitude),String.valueOf(selectedPlace.getLatLng().longitude),Boolean.toString(false),timeDetails.get(Constants.TIMEZONE_API_PROP_TIMEZONE_ID).toString());
-            citiesset.add(selectedCity.getDelimitedString());
-            DefaultList.writetoSharedInitial(c);
-            addItem(selectedCity);
 
-            return true;
+
+            //check if the selected Place exists, by constructing a unique Delimited String
+            String newCityId = String.valueOf(Integer.parseInt(LISTPLACES.get(LISTPLACES.size()-1).id) + 1 );
+            CityItem selectedCity = new CityItem(newCityId,selectedPlace.getName().toString(),selectedPlace.getAddress().toString(),String.valueOf(selectedPlace.getLatLng().latitude),String.valueOf(selectedPlace.getLatLng().longitude),Boolean.toString(false),timeDetails.get(Constants.TIMEZONE_API_PROP_TIMEZONE_ID).toString(),selectedPlace.getId());
+
+            Boolean alreadyExists = false;
+            for (CityItem existingCity: LISTPLACES) {
+                if(existingCity.getUniqueDelimitedString().equals(selectedCity.getUniqueDelimitedString()))
+                    alreadyExists = true;
+
+            }
+
+
+
+                if(!alreadyExists) {
+                citiesset.add(selectedCity.getDelimitedString());
+                DefaultList.writetoSharedInitial(c);
+                addItem(selectedCity);
+                return true;
+            }
+
+
         }
         return false;
     }
 
-    public static String[] defaultCities = {"1@San Jose@CA, United States@37.338208@-121.886329@true@America/Los_Angeles","2@Mumbai@Maharashtra, India@19.075984@72.877656@false@Asia/Calcutta"};
+    public static String[] defaultCities = {"1@San Jose@CA, United States@37.338208@-121.886329@true@America/Los_Angeles@sj123","2@Mumbai@Maharashtra, India@19.075984@72.877656@false@Asia/Calcutta"};
     public static Set<String> citiesset = new HashSet<String>();
 
     public static final List<CityItem> LISTPLACES = new ArrayList<>();
@@ -152,8 +169,9 @@ public class DefaultList {
         public final String longitude;
         public boolean isCurrent;
         public String timeZone;
+        public String cityId;
 
-        public CityItem(String id, String name, String description, String latitude, String longitude, String isCurrent, String timeZone) {
+        public CityItem(String id, String name, String description, String latitude, String longitude, String isCurrent, String timeZone, String cityId) {
             this.id = id;
             this.name = name;
             this.description = description;
@@ -161,6 +179,7 @@ public class DefaultList {
             this.longitude = longitude;
             this.isCurrent =  Boolean.parseBoolean(isCurrent);
             this.timeZone = timeZone;
+            this.cityId = cityId;
         }
 
         @Override
@@ -179,9 +198,14 @@ public class DefaultList {
             return df.format(date);
         }
 
-        public String getDelimitedString() {
-            return id+"@"+name+"@"+description+"@"+latitude+"@"+longitude+"@"+isCurrent+"@"+timeZone;
+        public String getUniqueDelimitedString() {
+            return name+"@"+description+"@"+latitude+"@"+longitude+"@"+isCurrent+"@"+timeZone+"@"+cityId;
         }
+
+        public String getDelimitedString() {
+            return id+"@"+name+"@"+description+"@"+latitude+"@"+longitude+"@"+isCurrent+"@"+timeZone+"@"+cityId;
+        }
+
 
         @Override
         public int compareTo(CityItem newcity) {
