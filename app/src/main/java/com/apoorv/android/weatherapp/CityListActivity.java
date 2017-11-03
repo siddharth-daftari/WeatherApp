@@ -145,7 +145,8 @@ import butterknife.ButterKnife;
     private void startAdding(Place place) {
         mForegroundHandler.obtainMessage(FIN_API_MSG, false).sendToTarget();
         try {
-            new DefaultList().addCity(selectedPlace,getApplicationContext());
+           Boolean cityAdded =  DefaultList.addCity(selectedPlace,getApplicationContext());
+            if(!cityAdded) Toast.makeText(this,"City Already Exists",Toast.LENGTH_SHORT).show();
         } catch (JSONException e) {
             e.printStackTrace();
         }

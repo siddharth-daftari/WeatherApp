@@ -51,7 +51,7 @@ public class DefaultList {
         for (String s: returnedset) {
             //for each city string in return set, construct a cityItem PoJo and add to the static list.
             String [] citydetails = s.split("@");
-            CityItem city1 = new CityItem(citydetails[0],citydetails[1],citydetails[2],citydetails[3],citydetails[4],citydetails[5],citydetails[6]);
+            CityItem city1 = new CityItem(citydetails[0],citydetails[1],citydetails[2],citydetails[3],citydetails[4],citydetails[5],citydetails[6],citydetails[7]);
             if(id.equalsIgnoreCase(city1.id)){
                 cityItem = city1;
             }
@@ -86,7 +86,7 @@ public class DefaultList {
 
     }
 
-    public boolean addCity (Place selectedPlace, Context c) throws JSONException {
+    public static boolean addCity (Place selectedPlace, Context c) throws JSONException {
         if(selectedPlace!=null) {
             HashMap timeDetails = null;
 
@@ -102,11 +102,24 @@ public class DefaultList {
             //check if the selected Place exists, by constructing a unique Delimited String
             String newCityId = String.valueOf(Integer.parseInt(LISTPLACES.get(LISTPLACES.size()-1).id) + 1 );
             CityItem selectedCity = new CityItem(newCityId,selectedPlace.getName().toString(),selectedPlace.getAddress().toString(),String.valueOf(selectedPlace.getLatLng().latitude),String.valueOf(selectedPlace.getLatLng().longitude),Boolean.toString(false),timeDetails.get(Constants.TIMEZONE_API_PROP_TIMEZONE_ID).toString(),selectedPlace.getId());
-            citiesset.add(selectedCity.getDelimitedString());
-            DefaultList.writetoSharedInitial(c);
-            addItem(selectedCity);
 
-            return true;
+            Boolean alreadyExists = false;
+            for (CityItem existingCity: LISTPLACES) {
+                if(existingCity.getUniqueDelimitedString().equals(selectedCity.getUniqueDelimitedString()))
+                    alreadyExists = true;
+
+            }
+
+
+
+                if(!alreadyExists) {
+                citiesset.add(selectedCity.getDelimitedString());
+                DefaultList.writetoSharedInitial(c);
+                addItem(selectedCity);
+                return true;
+            }
+
+
         }
         return false;
     }
@@ -185,9 +198,14 @@ public class DefaultList {
             return df.format(date);
         }
 
-        public String getDelimitedString() {
+        public String getUniqueDelimitedString() {
             return name+"@"+description+"@"+latitude+"@"+longitude+"@"+isCurrent+"@"+timeZone+"@"+cityId;
         }
+
+        public String getDelimitedString() {
+            return id+"@"+name+"@"+description+"@"+latitude+"@"+longitude+"@"+isCurrent+"@"+timeZone+"@"+cityId;
+        }
+
 
         @Override
         public int compareTo(CityItem newcity) {
