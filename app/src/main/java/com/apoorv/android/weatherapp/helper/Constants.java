@@ -11,6 +11,7 @@ public class Constants {
     public static final String TIMEZONE_API_PROP_STATUS = "status";
     public static final String TIMEZONE_API_PROP_TIMEZONE_NAME = "timeZoneName";
     public static final String TIMEZONE_API_PROP_TIMEZONE_ID = "timeZoneId";
+    public static final String TIMEZONE_API_CALC_FIELD_DATE = "dayDate";
 
     public static final String CURRENT_WEATHER_API_PROP_CITY_NAME = "name";
     public static final String CURRENT_WEATHER_API_PROP_MAIN = "main";
@@ -31,4 +32,5 @@ public class Constants {
 
     public static final String TEMPERATURE_UNIT_CELSIUS = "Celsius";
     public static final String TEMPERATURE_UNIT_FARENHEIT = "Farenheit";
+
 }

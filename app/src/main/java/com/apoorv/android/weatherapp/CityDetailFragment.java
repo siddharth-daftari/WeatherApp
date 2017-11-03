@@ -7,9 +7,21 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.apoorv.android.weatherapp.dummy.DefaultList;
 import com.apoorv.android.weatherapp.dummy.DummyContent;
+import com.apoorv.android.weatherapp.helper.Constants;
+import com.apoorv.android.weatherapp.helper.GetTimeZone;
+
+import org.json.JSONException;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.Date;
 
 /**
  * A fragment representing a single City detail screen.
@@ -41,15 +53,33 @@ public class CityDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (getArguments().containsKey(ARG_ITEM_ID)) {
-            // Load the dummy content specified by the fragment
-            // arguments. In a real-world scenario, use a Loader
-            // to load content from a content provider.
-            mItem = DummyContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
 
             Activity activity = this.getActivity();
-            CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
-            if (appBarLayout != null) {
-                appBarLayout.setTitle(mItem.id);
+            RelativeLayout relativeLayout = (RelativeLayout) activity.findViewById(R.id.city_detail_relative_layout);
+            DefaultList.CityItem cityItem = DefaultList.getCityDetails(this.getContext(), String.valueOf(getArguments().get(ARG_ITEM_ID)));
+
+            if(cityItem != null) {
+                //Setting city name
+                TextView cityNameTextView = (TextView) relativeLayout.findViewById(R.id.city_detail_name_value);
+                cityNameTextView.setText(cityItem.name);
+
+                //Setting day date
+                TextView cityDetailDate = (TextView) relativeLayout.findViewById(R.id.city_detail_date);
+                HashMap<String, String> dateDetails = null;
+                try {
+                    dateDetails = GetTimeZone.getTimeDetailsWithoutApiCall(cityItem.timeZone);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                if(dateDetails!=null){
+                    String dateFromTimeZone = dateDetails.get(Constants.TIMEZONE_API_CALC_FIELD_DATE);
+                    SimpleDateFormat df = new SimpleDateFormat("EEEE MMM dd yyyy");
+
+                    cityDetailDate.setText(df.format(new Date(dateFromTimeZone)));
+
+                }
+
             }
         }
     }
@@ -61,7 +91,7 @@ public class CityDetailFragment extends Fragment {
 
         // Show the dummy content as text in a TextView.
         if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.city_detail)).setText(mItem.details);
+            ((TextView) rootView.findViewById(R.id.city_detail)).setText("hello");
         }
 
         return rootView;

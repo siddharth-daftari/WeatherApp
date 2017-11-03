@@ -1,5 +1,13 @@
 <resources>
     <string name="app_name">WeatherApp</string>
-    <string name="title_city_detail">City Detail</string>
+    <string name="title_city_detail"></string>
+    <!--<string name="title_city_detail">City Detail</string>-->
     <string name="add_button">Add</string>
+
+    <!-- Strings for City List view -->
+
+
+    <!-- Strings for City Detail view -->
+    <string name="city_name_desc">City Name: </string>
+
 </resources>
