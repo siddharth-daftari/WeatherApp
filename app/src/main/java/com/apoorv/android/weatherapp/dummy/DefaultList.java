@@ -42,6 +42,24 @@ public class DefaultList {
         editor.apply();
     }
 
+    public static CityItem getCityDetails (Context c, String id) {
+        CityItem cityItem = null;
+
+        SharedPreferences sharedPref = c.getSharedPreferences("weathercities",Context.MODE_PRIVATE);
+        Set<String> returnedset = sharedPref.getStringSet("citieslist", Collections.EMPTY_SET);
+
+        for (String s: returnedset) {
+            //for each city string in return set, construct a cityItem PoJo and add to the static list.
+            String [] citydetails = s.split("@");
+            CityItem city1 = new CityItem(citydetails[0],citydetails[1],citydetails[2],citydetails[3],citydetails[4],citydetails[5],citydetails[6]);
+            if(id.equalsIgnoreCase(city1.id)){
+                cityItem = city1;
+            }
+        }
+
+        return cityItem;
+    }
+
     public static void readFromSharedInitial (Context c) {
         SharedPreferences sharedPref = c.getSharedPreferences("weathercities",Context.MODE_PRIVATE);
         Set<String> returnedset = sharedPref.getStringSet("citieslist", Collections.EMPTY_SET);

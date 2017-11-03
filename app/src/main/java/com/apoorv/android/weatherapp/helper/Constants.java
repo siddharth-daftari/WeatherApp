@@ -11,12 +11,15 @@ public class Constants {
     public static final String TIMEZONE_API_PROP_STATUS = "status";
     public static final String TIMEZONE_API_PROP_TIMEZONE_NAME = "timeZoneName";
     public static final String TIMEZONE_API_PROP_TIMEZONE_ID = "timeZoneId";
+    public static final String TIMEZONE_API_CALC_FIELD_DATE = "dayDate";
 
     public static final String CURRENT_WEATHER_API_PROP_CITY_NAME = "name";
     public static final String CURRENT_WEATHER_API_PROP_MAIN = "main";
     public static final String CURRENT_WEATHER_API_PROP_MAIN_TEMP = "temp";
     public static final String CURRENT_WEATHER_API_PROP_MAIN_TEMP_MIN = "temp_min";
     public static final String CURRENT_WEATHER_API_PROP_MAIN_TEMP_MAX = "temp_max";
+    public static final String CURRENT_WEATHER_API_PROP_WEATHER = "weather";
+    public static final String CURRENT_WEATHER_API_PROP_WEATHER_MAIN = "main";
 
     public static final String FORECAST_WEATHER_API_PROP_CITY = "city";
     public static final String FORECAST_WEATHER_API_PROP_CITY_NAME = "name";
@@ -31,4 +34,5 @@ public class Constants {
 
     public static final String TEMPERATURE_UNIT_CELSIUS = "Celsius";
     public static final String TEMPERATURE_UNIT_FARENHEIT = "Farenheit";
+
 }
