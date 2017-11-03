@@ -185,11 +185,22 @@ public class DefaultList {
             this.cityId = cityId;
         }
 
-        @Override
-        public String toString() {
+
+        public String descriptiontoString() {
 
 
             return description+", "+getListViewString(name,timeZone);
+        }
+
+        public String getCityName() {
+            return name;
+        }
+        public String getCityDescription() {
+            return description;
+        }
+
+        public String getTimeString() {
+           return getListViewString(name,timeZone);
         }
 
         public String getListViewString(String name, String timeZoneid) {

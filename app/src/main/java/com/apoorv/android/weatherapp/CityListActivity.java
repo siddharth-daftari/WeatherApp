@@ -264,8 +264,11 @@ import butterknife.ButterKnife;
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);
-            holder.mIdView.setText(mValues.get(position).id);
-            holder.mContentView.setText(mValues.get(position).toString());
+           // holder.mIdView.setText(mValues.get(position).id);
+            holder.mNameView.setText(mValues.get(position).getCityName());
+            holder.mContentView.setText(mValues.get(position).getCityDescription());
+            holder.mCurrentTime.setText(mValues.get(position).getTimeString());
+            //holder.mContentView.setText(mValues.get(position).toString());
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -309,15 +312,21 @@ import butterknife.ButterKnife;
 
         public class ViewHolder extends RecyclerView.ViewHolder  {
             public final View mView;
-            public final TextView mIdView;
+           // public final TextView mIdView;
             public final TextView mContentView;
             public DefaultList.CityItem mItem;
+            public final TextView mNameView;
+            public final TextView mCurrentTemperature;
+            public final TextView mCurrentTime;
 
             public ViewHolder(View view) {
                 super(view);
                 mView = view;
-                mIdView = (TextView) view.findViewById(R.id.id);
+                //mIdView = (TextView) view.findViewById(R.id.id);
                 mContentView = (TextView) view.findViewById(R.id.content);
+                mNameView = (TextView) view.findViewById(R.id.cityNameText);
+                mCurrentTime = (TextView) view.findViewById(R.id.currentTimeText);
+                mCurrentTemperature = (TextView) view.findViewById(R.id.currentTemperature);
 
             }
 
