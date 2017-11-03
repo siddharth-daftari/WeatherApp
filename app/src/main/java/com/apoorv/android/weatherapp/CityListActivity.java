@@ -199,7 +199,7 @@ import butterknife.ButterKnife;
         HandlerThread handlerThread = new HandlerThread("BackgroundThread");
         handlerThread.start();
         TimeZoneCallback timeZoneCallback = new TimeZoneCallback();
-        mForegroundHandler = new Handler(handlerThread.getLooper(), timeZoneCallback);
+        mBackgroundHandler = new Handler(handlerThread.getLooper(), timeZoneCallback);
         mForegroundHandler = new Handler(timeZoneCallback);
 
         // Handle item selection

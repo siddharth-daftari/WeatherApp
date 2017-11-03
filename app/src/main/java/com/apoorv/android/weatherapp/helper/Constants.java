@@ -18,6 +18,8 @@ public class Constants {
     public static final String CURRENT_WEATHER_API_PROP_MAIN_TEMP = "temp";
     public static final String CURRENT_WEATHER_API_PROP_MAIN_TEMP_MIN = "temp_min";
     public static final String CURRENT_WEATHER_API_PROP_MAIN_TEMP_MAX = "temp_max";
+    public static final String CURRENT_WEATHER_API_PROP_WEATHER = "weather";
+    public static final String CURRENT_WEATHER_API_PROP_WEATHER_MAIN = "main";
 
     public static final String FORECAST_WEATHER_API_PROP_CITY = "city";
     public static final String FORECAST_WEATHER_API_PROP_CITY_NAME = "name";
