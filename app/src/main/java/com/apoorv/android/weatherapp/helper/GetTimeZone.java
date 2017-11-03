@@ -40,8 +40,22 @@ public class GetTimeZone {
 
         returnHashMap.put(Constants.TIMEZONE_API_PROP_TIMEZONE_ID,responseJson.getString(Constants.TIMEZONE_API_PROP_TIMEZONE_ID));
 
+
         return returnHashMap;
     }
 
+    public static HashMap<String, String> getTimeDetailsWithoutApiCall(String timeZone ) throws JSONException {
+        HashMap returnHashMap = new HashMap<String, String>();
 
+        if(timeZone!=null && !"".equalsIgnoreCase(timeZone)){
+
+            DateFormat df = new SimpleDateFormat();
+            df.setTimeZone(TimeZone.getTimeZone(timeZone));
+            Date date = new Date();
+            returnHashMap.put(Constants.TIMEZONE_API_CALC_FIELD_DATE,new Date(df.format(date)).toString());
+            df.setTimeZone(Calendar.getInstance().getTimeZone());
+
+        }
+        return returnHashMap;
+    }
 }
