@@ -13,7 +13,9 @@ import android.widget.TextView;
 import com.apoorv.android.weatherapp.dummy.DefaultList;
 import com.apoorv.android.weatherapp.dummy.DummyContent;
 import com.apoorv.android.weatherapp.helper.Constants;
+import com.apoorv.android.weatherapp.helper.GetCurrentWeather;
 import com.apoorv.android.weatherapp.helper.GetTimeZone;
+import com.apoorv.android.weatherapp.helper.RequestClass;
 
 import org.json.JSONException;
 
@@ -52,35 +54,44 @@ public class CityDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments().containsKey(ARG_ITEM_ID)) {
+        try {
+            if (getArguments().containsKey(ARG_ITEM_ID)) {
 
-            Activity activity = this.getActivity();
-            RelativeLayout relativeLayout = (RelativeLayout) activity.findViewById(R.id.city_detail_relative_layout);
-            DefaultList.CityItem cityItem = DefaultList.getCityDetails(this.getContext(), String.valueOf(getArguments().get(ARG_ITEM_ID)));
+                HashMap<String, String> responseHashMap = null;
 
-            if(cityItem != null) {
-                //Setting city name
-                TextView cityNameTextView = (TextView) relativeLayout.findViewById(R.id.city_detail_name_value);
-                cityNameTextView.setText(cityItem.name);
+                Activity activity = this.getActivity();
+                RelativeLayout relativeLayout = (RelativeLayout) activity.findViewById(R.id.city_detail_relative_layout);
+                DefaultList.CityItem cityItem = DefaultList.getCityDetails(this.getContext(), String.valueOf(getArguments().get(ARG_ITEM_ID)));
 
-                //Setting day date
-                TextView cityDetailDate = (TextView) relativeLayout.findViewById(R.id.city_detail_date);
-                HashMap<String, String> dateDetails = null;
-                try {
-                    dateDetails = GetTimeZone.getTimeDetailsWithoutApiCall(cityItem.timeZone);
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                if(cityItem != null) {
+                    //Setting city name
+                    TextView cityNameTextView = (TextView) relativeLayout.findViewById(R.id.city_detail_name_value);
+                    cityNameTextView.setText(cityItem.name);
+
+                    //Setting day date
+                    TextView cityDetailDate = (TextView) relativeLayout.findViewById(R.id.city_detail_date);
+
+
+                    responseHashMap = GetTimeZone.getTimeDetailsWithoutApiCall(cityItem.timeZone);
+
+                    if(responseHashMap!=null){
+                        String dateFromTimeZone = responseHashMap.get(Constants.TIMEZONE_API_CALC_FIELD_DATE);
+                        SimpleDateFormat df = new SimpleDateFormat("EEEE MMM dd yyyy");
+
+                        cityDetailDate.setText(df.format(new Date(dateFromTimeZone)));
+
+                    }
+
+                    //Setting Weather
+                    RequestClass.startRequestQueue();
+                    new GetCurrentWeather().processWeatherApiCurrent(cityItem.latitude, cityItem.longitude, Constants.ACTION_UPDATE_CITY_DETAIL_UI, activity, null);
+
+
+
                 }
-
-                if(dateDetails!=null){
-                    String dateFromTimeZone = dateDetails.get(Constants.TIMEZONE_API_CALC_FIELD_DATE);
-                    SimpleDateFormat df = new SimpleDateFormat("EEEE MMM dd yyyy");
-
-                    cityDetailDate.setText(df.format(new Date(dateFromTimeZone)));
-
-                }
-
             }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 

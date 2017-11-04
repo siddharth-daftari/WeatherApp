@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.apoorv.android.weatherapp.dummy.DefaultList;
 import com.apoorv.android.weatherapp.dummy.DummyContent;
+import com.apoorv.android.weatherapp.helper.Constants;
 import com.apoorv.android.weatherapp.helper.SettingsPreference;
 import com.apoorv.android.weatherapp.mSwiper.SwipeHelper;
 import com.google.android.gms.common.api.Status;
@@ -142,66 +143,9 @@ import butterknife.ButterKnife;
 
     }
 
-    private void startAdding(Place place) {
-        mForegroundHandler.obtainMessage(FIN_API_MSG, false).sendToTarget();
-        try {
-           Boolean cityAdded =  DefaultList.addCity(selectedPlace,getApplicationContext());
-            if(!cityAdded) Toast.makeText(this,"City Already Exists",Toast.LENGTH_SHORT).show();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        mForegroundHandler.obtainMessage(FIN_API_MSG, true).sendToTarget();
-    }
-
-    class TimeZoneCallback implements Handler.Callback {
-
-        @Override
-        public boolean handleMessage(Message msg) {
-            switch (msg.what) {
-                case START_API_MSG:
-                    startAdding((Place) msg.obj);
-                    break;
-                case FIN_API_MSG:
-                    if (!mPaused) {
-                        cityListAdapter.notifyDataSetChanged();
-                    }
-                    break;
-            }
-            return true;
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mPaused = false;
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        mPaused = true;
-    }
-
-    @Override
-    protected void onDestroy() {
-        if(mBackgroundHandler != null) {
-            mBackgroundHandler.removeMessages(START_API_MSG);
-            if(mBackgroundHandler.getLooper()!= null) {
-                mBackgroundHandler.getLooper().quit();
-            }
-        }
-        super.onDestroy();
-    }
-
     //Settings Menu
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        HandlerThread handlerThread = new HandlerThread("BackgroundThread");
-        handlerThread.start();
-        TimeZoneCallback timeZoneCallback = new TimeZoneCallback();
-        mBackgroundHandler = new Handler(handlerThread.getLooper(), timeZoneCallback);
-        mForegroundHandler = new Handler(timeZoneCallback);
 
         // Handle item selection
         switch (item.getItemId()) {
@@ -209,7 +153,7 @@ import butterknife.ButterKnife;
                 Boolean cityAdded = null;
 
                 try {
-                    mBackgroundHandler.obtainMessage(START_API_MSG).sendToTarget();
+                    DefaultList.addCity(selectedPlace,getApplicationContext(), Constants.ACTION_UPDATE_CITY_LIST_UI_FOR_TIMEZONE, this, this.getCityListAdapter());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
