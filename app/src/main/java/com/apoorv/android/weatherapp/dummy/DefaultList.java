@@ -74,15 +74,15 @@ public class DefaultList {
             citiesset.add(city1.getDelimitedString());
         }
 
-        //check if we have cities. If not, add the default sity to sharedContext and to the List.
-        if(LISTPLACES.size() == 0) {
-            Log.i("Apoorv", "No city database, adding default to the list");
-            citiesset.add(defaultCities[0]);
-            DefaultList.writetoSharedInitial(c);
-            String[] citydetails = defaultCities[0].split("@");
-            CityItem city1 = new CityItem(citydetails[0],citydetails[1],citydetails[2],citydetails[3],citydetails[4],citydetails[5],citydetails[6],citydetails[7]);
-            addItem(city1);
-        }
+//        //check if we have cities. If not, add the default sity to sharedContext and to the List.
+//        if(LISTPLACES.size() == 0) {
+//            Log.i("Apoorv", "No city database, adding default to the list");
+//            citiesset.add(defaultCities[0]);
+//            DefaultList.writetoSharedInitial(c);
+//            String[] citydetails = defaultCities[0].split("@");
+//            CityItem city1 = new CityItem(citydetails[0],citydetails[1],citydetails[2],citydetails[3],citydetails[4],citydetails[5],citydetails[6],citydetails[7]);
+//            addItem(city1);
+//        }
 
     }
 
@@ -100,7 +100,10 @@ public class DefaultList {
 
 
             //check if the selected Place exists, by constructing a unique Delimited String
-            String newCityId = String.valueOf(Integer.parseInt(LISTPLACES.get(LISTPLACES.size()-1).id) + 1 );
+            String newCityId = null;
+            if(LISTPLACES.size()>0)
+            newCityId = String.valueOf(Integer.parseInt(LISTPLACES.get(LISTPLACES.size()-1).id) + 1 );
+            else newCityId = "1";
             CityItem selectedCity = new CityItem(newCityId,selectedPlace.getName().toString(),selectedPlace.getAddress().toString(),String.valueOf(selectedPlace.getLatLng().latitude),String.valueOf(selectedPlace.getLatLng().longitude),Boolean.toString(false),timeDetails.get(Constants.TIMEZONE_API_PROP_TIMEZONE_ID).toString(),selectedPlace.getId());
 
             Boolean alreadyExists = false;
@@ -182,11 +185,22 @@ public class DefaultList {
             this.cityId = cityId;
         }
 
-        @Override
-        public String toString() {
+
+        public String descriptiontoString() {
 
 
-            return name+", "+getListViewString(name,timeZone);
+            return description+", "+getListViewString(name,timeZone);
+        }
+
+        public String getCityName() {
+            return name;
+        }
+        public String getCityDescription() {
+            return description;
+        }
+
+        public String getTimeString() {
+           return getListViewString(name,timeZone);
         }
 
         public String getListViewString(String name, String timeZoneid) {
