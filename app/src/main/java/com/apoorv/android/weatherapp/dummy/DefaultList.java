@@ -1,5 +1,6 @@
 package com.apoorv.android.weatherapp.dummy;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
@@ -20,6 +21,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TimeZone;
 
@@ -86,42 +88,19 @@ public class DefaultList {
 
     }
 
-    public static boolean addCity (Place selectedPlace, Context c) throws JSONException {
+    public static void addCity (Place selectedPlace, Context c, String action, Activity activity, CityListActivity.SimpleItemRecyclerViewAdapter cityListAdapter) throws JSONException {
         if(selectedPlace!=null) {
-            HashMap timeDetails = null;
 
             for(CityItem city : LISTPLACES)
             {
                 Log.i("Apoorv list",city.getDelimitedString());
             }
 
-            timeDetails = GetTimeZone.getTimeDetails(String.valueOf(selectedPlace.getLatLng().latitude),String.valueOf(selectedPlace.getLatLng().longitude));
-            //timeDetails = mt.getTimeDetails();
-
-
-            //check if the selected Place exists, by constructing a unique Delimited String
-            String newCityId = String.valueOf(Integer.parseInt(LISTPLACES.get(LISTPLACES.size()-1).id) + 1 );
-            CityItem selectedCity = new CityItem(newCityId,selectedPlace.getName().toString(),selectedPlace.getAddress().toString(),String.valueOf(selectedPlace.getLatLng().latitude),String.valueOf(selectedPlace.getLatLng().longitude),Boolean.toString(false),timeDetails.get(Constants.TIMEZONE_API_PROP_TIMEZONE_ID).toString(),selectedPlace.getId());
-
-            Boolean alreadyExists = false;
-            for (CityItem existingCity: LISTPLACES) {
-                if(existingCity.getUniqueDelimitedString().equals(selectedCity.getUniqueDelimitedString()))
-                    alreadyExists = true;
-
-            }
-
-
-
-                if(!alreadyExists) {
-                citiesset.add(selectedCity.getDelimitedString());
-                DefaultList.writetoSharedInitial(c);
-                addItem(selectedCity);
-                return true;
-            }
-
-
+            HashMap<String, Object> hashMap = new HashMap<String, Object>();
+            hashMap.put(Constants.SELECTED_PLACE, selectedPlace);
+            hashMap.put(Constants.CITY_LIST_ADAPATER, cityListAdapter);
+            new GetTimeZone().getTimeDetails(String.valueOf(selectedPlace.getLatLng().latitude),String.valueOf(selectedPlace.getLatLng().longitude), action, activity, hashMap);
         }
-        return false;
     }
 
     public static String[] defaultCities = {"1@San Jose@CA, United States@37.338208@-121.886329@true@America/Los_Angeles@sj123","2@Mumbai@Maharashtra, India@19.075984@72.877656@false@Asia/Calcutta"};
@@ -132,7 +111,7 @@ public class DefaultList {
 
 
 
-    private static void addItem(DefaultList.CityItem item) {
+    public static void addItem(DefaultList.CityItem item) {
         LISTPLACES.add(item);
     }
 

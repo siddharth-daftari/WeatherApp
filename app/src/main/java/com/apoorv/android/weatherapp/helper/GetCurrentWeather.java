@@ -1,6 +1,23 @@
 package com.apoorv.android.weatherapp.helper;
 
+import android.app.Activity;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import com.android.volley.Cache;
+import com.android.volley.Network;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.BasicNetwork;
+import com.android.volley.toolbox.DiskBasedCache;
+import com.android.volley.toolbox.HurlStack;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.apoorv.android.weatherapp.R;
+
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
@@ -27,33 +44,68 @@ import org.json.JSONObject;
 
 public class GetCurrentWeather {
 
-    private HashMap<String, String> processWeatherApiCurrent(String latitude, String longitude) throws JSONException{
+    public void processWeatherApiCurrent(String latitude, String longitude, final String action, final Activity activity, HashMap<String, Object> extraParams) throws JSONException{
 
-        HashMap returnHashMap = new HashMap<String, String>();
+        String urlString = "https://api.openweathermap.org/data/2.5/weather?lat="
+                + latitude + "&lon=" + longitude + "&APPID=" + Secrets.SECRET_FOR_WEATHER_API;
 
-        JSONObject jsonObject = CallApi.callApi("https://api.openweathermap.org/data/2.5/weather?lat="
-				+ latitude + "&lon=" + longitude + "&APPID=" + Secrets.SECRET_FOR_WEATHER_API);
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (Request.Method.GET, urlString,null, new Response.Listener<JSONObject>() {
 
-        JSONObject jsonObjectMain = jsonObject.getJSONObject(Constants.CURRENT_WEATHER_API_PROP_MAIN);
-        Double currentTemperature = jsonObjectMain.getDouble(Constants.CURRENT_WEATHER_API_PROP_MAIN_TEMP);
-        Double temperatureMax = jsonObjectMain.getDouble(Constants.CURRENT_WEATHER_API_PROP_MAIN_TEMP_MAX);
-        Double temperatureMin = jsonObjectMain.getDouble(Constants.CURRENT_WEATHER_API_PROP_MAIN_TEMP_MIN);
+                    @Override
+                    public void onResponse(JSONObject jsonObject) {
+                        try {
 
-        JSONObject jsonObjectWeather = jsonObject.getJSONArray(Constants.CURRENT_WEATHER_API_PROP_WEATHER).getJSONObject(0);
-        String currentWeather = jsonObjectWeather.getString(Constants.CURRENT_WEATHER_API_PROP_WEATHER_MAIN);
+                            HashMap returnHashMap = new HashMap<String, String>();
 
-        System.out.println("currentTemperature: " + currentTemperature );
-        System.out.println("temperatureMax: " + temperatureMax );
-        System.out.println("temperatureMin: " + temperatureMin );
-        System.out.println("currentWeather: " + currentWeather );
+                            JSONObject jsonObjectMain = jsonObject.getJSONObject(Constants.CURRENT_WEATHER_API_PROP_MAIN);
+                            Double currentTemperature = jsonObjectMain.getDouble(Constants.CURRENT_WEATHER_API_PROP_MAIN_TEMP);
+                            Double temperatureMax = jsonObjectMain.getDouble(Constants.CURRENT_WEATHER_API_PROP_MAIN_TEMP_MAX);
+                            Double temperatureMin = jsonObjectMain.getDouble(Constants.CURRENT_WEATHER_API_PROP_MAIN_TEMP_MIN);
 
-        returnHashMap.put(Constants.CURRENT_WEATHER_API_PROP_MAIN_TEMP, currentTemperature);
-        returnHashMap.put(Constants.CURRENT_WEATHER_API_PROP_MAIN_TEMP_MAX, temperatureMax);
-        returnHashMap.put(Constants.CURRENT_WEATHER_API_PROP_MAIN_TEMP_MIN, temperatureMin);
-        returnHashMap.put(Constants.CURRENT_WEATHER_API_PROP_MAIN_TEMP, currentTemperature);
-        returnHashMap.put(Constants.CURRENT_WEATHER_API_PROP_WEATHER, currentWeather);
+                            JSONObject jsonObjectWeather = jsonObject.getJSONArray(Constants.CURRENT_WEATHER_API_PROP_WEATHER).getJSONObject(0);
+                            String currentWeather = jsonObjectWeather.getString(Constants.CURRENT_WEATHER_API_PROP_WEATHER_MAIN);
 
-        return returnHashMap;
+                            System.out.println("currentTemperature: " + currentTemperature);
+                            System.out.println("temperatureMax: " + temperatureMax);
+                            System.out.println("temperatureMin: " + temperatureMin);
+                            System.out.println("currentWeather: " + currentWeather);
+
+                            returnHashMap.put(Constants.CURRENT_WEATHER_API_PROP_MAIN_TEMP, currentTemperature);
+                            returnHashMap.put(Constants.CURRENT_WEATHER_API_PROP_MAIN_TEMP_MAX, temperatureMax);
+                            returnHashMap.put(Constants.CURRENT_WEATHER_API_PROP_MAIN_TEMP_MIN, temperatureMin);
+                            returnHashMap.put(Constants.CURRENT_WEATHER_API_PROP_MAIN_TEMP, currentTemperature);
+                            returnHashMap.put(Constants.CURRENT_WEATHER_API_PROP_WEATHER, currentWeather);
+
+                            updateUI(action, activity, returnHashMap);
+
+
+                        }catch (JSONException e){
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+
+                    }
+                });
+        RequestClass.getRequestQueue().add(jsObjRequest);
+    }
+
+    public void updateUI(String action, Activity activity, HashMap<String, String> returnHashMap){
+
+        switch (action) {
+            case Constants.ACTION_UPDATE_CITY_DETAIL_UI:
+                RelativeLayout relativeLayout = (RelativeLayout) activity.findViewById(R.id.city_detail_relative_layout);
+
+                TextView cityNameTextView = (TextView) relativeLayout.findViewById(R.id.city_detail_name_value);
+                cityNameTextView.setText(returnHashMap.get(Constants.CURRENT_WEATHER_API_PROP_WEATHER));
+                break;
+        }
+
 
     }
 }
