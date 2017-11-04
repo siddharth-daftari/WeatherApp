@@ -8,6 +8,7 @@ import android.util.Log;
 import com.apoorv.android.weatherapp.CityListActivity;
 import com.apoorv.android.weatherapp.helper.Constants;
 import com.apoorv.android.weatherapp.helper.GetTimeZone;
+import com.apoorv.android.weatherapp.helper.RequestClass;
 import com.apoorv.android.weatherapp.helper.SettingsPreference;
 import com.google.android.gms.location.places.Place;
 
@@ -76,15 +77,15 @@ public class DefaultList {
             citiesset.add(city1.getDelimitedString());
         }
 
-        //check if we have cities. If not, add the default sity to sharedContext and to the List.
-        if(LISTPLACES.size() == 0) {
-            Log.i("Apoorv", "No city database, adding default to the list");
-            citiesset.add(defaultCities[0]);
-            DefaultList.writetoSharedInitial(c);
-            String[] citydetails = defaultCities[0].split("@");
-            CityItem city1 = new CityItem(citydetails[0],citydetails[1],citydetails[2],citydetails[3],citydetails[4],citydetails[5],citydetails[6],citydetails[7]);
-            addItem(city1);
-        }
+//        //check if we have cities. If not, add the default sity to sharedContext and to the List.
+//        if(LISTPLACES.size() == 0) {
+//            Log.i("Apoorv", "No city database, adding default to the list");
+//            citiesset.add(defaultCities[0]);
+//            DefaultList.writetoSharedInitial(c);
+//            String[] citydetails = defaultCities[0].split("@");
+//            CityItem city1 = new CityItem(citydetails[0],citydetails[1],citydetails[2],citydetails[3],citydetails[4],citydetails[5],citydetails[6],citydetails[7]);
+//            addItem(city1);
+//        }
 
     }
 
@@ -99,7 +100,9 @@ public class DefaultList {
             HashMap<String, Object> hashMap = new HashMap<String, Object>();
             hashMap.put(Constants.SELECTED_PLACE, selectedPlace);
             hashMap.put(Constants.CITY_LIST_ADAPATER, cityListAdapter);
+            RequestClass.startRequestQueue();
             new GetTimeZone().getTimeDetails(String.valueOf(selectedPlace.getLatLng().latitude),String.valueOf(selectedPlace.getLatLng().longitude), action, activity, hashMap);
+
         }
     }
 
@@ -161,11 +164,22 @@ public class DefaultList {
             this.cityId = cityId;
         }
 
-        @Override
-        public String toString() {
+
+        public String descriptiontoString() {
 
 
-            return name+", "+getListViewString(name,timeZone);
+            return description+", "+getListViewString(name,timeZone);
+        }
+
+        public String getCityName() {
+            return name;
+        }
+        public String getCityDescription() {
+            return description;
+        }
+
+        public String getTimeString() {
+           return getListViewString(name,timeZone);
         }
 
         public String getListViewString(String name, String timeZoneid) {

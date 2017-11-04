@@ -1,20 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:background="@color/common_google_signin_btn_text_light_disabled"
+    android:orientation="horizontal"
+    android:weightSum="1">
+
+    <!--<TextView-->
+        <!--android:id="@+id/id"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_margin="@dimen/text_margin"-->
+        <!--android:text="ID"-->
+        <!--android:textAppearance="?attr/textAppearanceListItem" />-->
+
+    <LinearLayout
+        android:layout_width="169dp"
+        android:layout_height="wrap_content"
+        android:elevation="24dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/cityNameText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/text_margin"
+            android:text="Name"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/text_margin"
+            android:fontFamily="sans-serif"
+            android:text="CA, United States"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
 
     <TextView
-        android:id="@+id/id"
+        android:id="@+id/currentTimeText"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/text_margin"
+        android:text="12:00 PM"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/currentTemperature"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin"
-        android:textAppearance="?attr/textAppearanceListItem" />
+        android:text="30 C"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textSize="30sp" />
 
-    <TextView
-        android:id="@+id/content"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:textAppearance="?attr/textAppearanceListItem" />
 </LinearLayout>
