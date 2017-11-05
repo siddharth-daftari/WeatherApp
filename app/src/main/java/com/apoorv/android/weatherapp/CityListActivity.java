@@ -24,6 +24,8 @@ import android.widget.Toast;
 import com.apoorv.android.weatherapp.dummy.DefaultList;
 import com.apoorv.android.weatherapp.dummy.DummyContent;
 import com.apoorv.android.weatherapp.helper.Constants;
+import com.apoorv.android.weatherapp.helper.GetCurrentWeather;
+import com.apoorv.android.weatherapp.helper.RequestClass;
 import com.apoorv.android.weatherapp.helper.SettingsPreference;
 import com.apoorv.android.weatherapp.mSwiper.SwipeHelper;
 import com.google.android.gms.common.api.Status;
@@ -35,6 +37,7 @@ import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import org.json.JSONException;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -212,6 +215,20 @@ import butterknife.ButterKnife;
             holder.mNameView.setText(mValues.get(position).getCityName());
             holder.mContentView.setText(mValues.get(position).getCityDescription());
             holder.mCurrentTime.setText(mValues.get(position).getTimeString());
+
+            //Create new Hashmap for API parameters
+            HashMap<String, Object> weatherAPIMap = new HashMap<String, Object>();
+            weatherAPIMap.put("adapter",cityListAdapter);
+            weatherAPIMap.put("temperatureView",holder.mCurrentTemperature);
+
+
+            //Start request Queue
+            RequestClass.startRequestQueue();
+            try {
+                new GetCurrentWeather().processWeatherApiCurrent(holder.mItem.latitude,holder.mItem.longitude,Constants.ACTION_UPDATE_CITY_LIST_ITEM_FOR_TEMPERATURE,getParent(),weatherAPIMap);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             //holder.mContentView.setText(mValues.get(position).toString());
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
