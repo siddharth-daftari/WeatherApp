@@ -163,7 +163,7 @@ import butterknife.ButterKnife;
 
                 return true;
             case R.id.toggleUnits:
-                SettingsPreference.toggleUnits();
+                SettingsPreference.toggleUnits(this,cityListAdapter);
                 item.setTitle(SettingsPreference.getToggleLabel());
 
             default:
@@ -215,6 +215,7 @@ import butterknife.ButterKnife;
             holder.mNameView.setText(mValues.get(position).getCityName());
             holder.mContentView.setText(mValues.get(position).getCityDescription());
             holder.mCurrentTime.setText(mValues.get(position).getTimeString());
+           // holder.mCurrentPreferenceUnit.setText();
 
             //Create new Hashmap for API parameters
             HashMap<String, Object> weatherAPIMap = new HashMap<String, Object>();
@@ -279,6 +280,7 @@ import butterknife.ButterKnife;
             public final TextView mNameView;
             public final TextView mCurrentTemperature;
             public final TextView mCurrentTime;
+            public final TextView mCurrentPreferenceUnit;
 
             public ViewHolder(View view) {
                 super(view);
@@ -288,6 +290,7 @@ import butterknife.ButterKnife;
                 mNameView = (TextView) view.findViewById(R.id.cityNameText);
                 mCurrentTime = (TextView) view.findViewById(R.id.currentTimeText);
                 mCurrentTemperature = (TextView) view.findViewById(R.id.currentTemperature);
+                mCurrentPreferenceUnit = (TextView) view.findViewById(R.id.currentPreferenceUnit);
 
             }
 
