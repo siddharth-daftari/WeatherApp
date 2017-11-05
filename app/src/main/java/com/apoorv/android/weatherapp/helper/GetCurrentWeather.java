@@ -1,6 +1,8 @@
 package com.apoorv.android.weatherapp.helper;
 
 import android.app.Activity;
+import android.graphics.BitmapFactory;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -66,17 +68,20 @@ public class GetCurrentWeather {
 
                             JSONObject jsonObjectWeather = jsonObject.getJSONArray(Constants.CURRENT_WEATHER_API_PROP_WEATHER).getJSONObject(0);
                             String currentWeather = jsonObjectWeather.getString(Constants.CURRENT_WEATHER_API_PROP_WEATHER_MAIN);
+                            String currentWeatherIcon = jsonObjectWeather.getString(Constants.CURRENT_WEATHER_API_PROP_WEATHER_ICON);
 
                             System.out.println("currentTemperature: " + currentTemperature);
                             System.out.println("temperatureMax: " + temperatureMax);
                             System.out.println("temperatureMin: " + temperatureMin);
                             System.out.println("currentWeather: " + currentWeather);
+                            System.out.println("currentWeatherIcon: " + currentWeatherIcon);
 
                             returnHashMap.put(Constants.CURRENT_WEATHER_API_PROP_MAIN_TEMP, currentTemperature);
                             returnHashMap.put(Constants.CURRENT_WEATHER_API_PROP_MAIN_TEMP_MAX, temperatureMax);
                             returnHashMap.put(Constants.CURRENT_WEATHER_API_PROP_MAIN_TEMP_MIN, temperatureMin);
                             returnHashMap.put(Constants.CURRENT_WEATHER_API_PROP_MAIN_TEMP, currentTemperature);
                             returnHashMap.put(Constants.CURRENT_WEATHER_API_PROP_WEATHER, currentWeather);
+                            returnHashMap.put(Constants.CURRENT_WEATHER_API_PROP_WEATHER_ICON, currentWeatherIcon);
 
                             updateUI(action, activity, returnHashMap, extraParams);
 
@@ -102,8 +107,17 @@ public class GetCurrentWeather {
             case Constants.ACTION_UPDATE_CITY_DETAIL_UI:
                 RelativeLayout relativeLayout = (RelativeLayout) activity.findViewById(R.id.city_detail_relative_layout);
 
-                TextView cityNameTextView = (TextView) relativeLayout.findViewById(R.id.city_detail_name_value);
-                cityNameTextView.setText(returnHashMap.get(Constants.CURRENT_WEATHER_API_PROP_WEATHER));
+                //Setting weather icon
+                ImageView imageView = (ImageView) relativeLayout.findViewById(R.id.city_detail_weather_icon);
+                imageView.setImageDrawable(activity.getDrawable( getDrawableResourceId("icon_" + returnHashMap.get(Constants.CURRENT_WEATHER_API_PROP_WEATHER_ICON)) ));
+
+                //Setting weather status
+                TextView cityWeatherTextView = (TextView) relativeLayout.findViewById(R.id.city_detail_weather_status);
+                cityWeatherTextView.setText(returnHashMap.get(Constants.CURRENT_WEATHER_API_PROP_WEATHER));
+
+                //Setting current temperature
+                
+
                 break;
             case Constants.ACTION_UPDATE_CITY_LIST_ITEM_FOR_TEMPERATURE:
                 TextView temperatureView = (TextView) extraparams.get("temperatureView");
@@ -111,7 +125,50 @@ public class GetCurrentWeather {
 //                CityListActivity.SimpleItemRecyclerViewAdapter givenAdapter = (CityListActivity.SimpleItemRecyclerViewAdapter) extraparams.get("adapter");
 //                givenAdapter.notifyDataSetChanged();
         }
+    }
 
+    public int getDrawableResourceId(String resourceName){
+        int returnValue = 0;
 
+        switch (resourceName){
+            case Constants.ICON_01D:
+                return R.drawable.icon_01d;
+            case Constants.ICON_01N:
+                return R.drawable.icon_01n;
+            case Constants.ICON_02D:
+                return R.drawable.icon_02d;
+            case Constants.ICON_02N:
+                return R.drawable.icon_02n;
+            case Constants.ICON_03D:
+                return R.drawable.icon_03d;
+            case Constants.ICON_03N:
+                return R.drawable.icon_03n;
+            case Constants.ICON_04D:
+                return R.drawable.icon_04d;
+            case Constants.ICON_04N:
+                return R.drawable.icon_04n;
+            case Constants.ICON_09D:
+                return R.drawable.icon_09d;
+            case Constants.ICON_09N:
+                return R.drawable.icon_09n;
+            case Constants.ICON_10D:
+                return R.drawable.icon_10d;
+            case Constants.ICON_10N:
+                return R.drawable.icon_10n;
+            case Constants.ICON_11D:
+                return R.drawable.icon_11d;
+            case Constants.ICON_11N:
+                return R.drawable.icon_11n;
+            case Constants.ICON_13D:
+                return R.drawable.icon_13d;
+            case Constants.ICON_13N:
+                return R.drawable.icon_13n;
+            case Constants.ICON_50D:
+                return R.drawable.icon_50d;
+            case Constants.ICON_50N:
+                return R.drawable.icon_50n;
+            default:
+                return R.drawable.icon_01d;
+        }
     }
 }

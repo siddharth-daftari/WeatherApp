@@ -44,7 +44,9 @@
                     android:layout_height="wrap_content"
                     android:gravity="left"
                     android:paddingTop="45dp"
-                    android:weightSum="12">
+                    android:weightSum="12"
+                    android:orientation="horizontal"
+                    android:id="@+id/city_detail_linear_layout_1">
 
                     <TextView
                         android:id="@+id/city_detail_name_value"
@@ -71,8 +73,21 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="left"
-                    android:weightSum="12">
+                    android:weightSum="12"
+                    android:orientation="horizontal"
+                    android:id="@+id/city_detail_linear_layout_2"
+                    android:layout_below="@id/city_detail_linear_layout_1">
 
+                    <ImageView
+                        android:id="@+id/city_detail_weather_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:id="@+id/city_detail_weather_status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@id/city_detail_weather_icon"/>
 
                 </LinearLayout>
 

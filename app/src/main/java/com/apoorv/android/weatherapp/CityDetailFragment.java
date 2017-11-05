@@ -86,8 +86,6 @@ public class CityDetailFragment extends Fragment {
                     RequestClass.startRequestQueue();
                     new GetCurrentWeather().processWeatherApiCurrent(cityItem.latitude, cityItem.longitude, Constants.ACTION_UPDATE_CITY_DETAIL_UI, activity, null);
 
-
-
                 }
             }
         } catch (JSONException e) {
