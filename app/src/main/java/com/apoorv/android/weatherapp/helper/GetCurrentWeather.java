@@ -14,6 +14,7 @@ import com.android.volley.toolbox.BasicNetwork;
 import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.apoorv.android.weatherapp.CityListActivity;
 import com.apoorv.android.weatherapp.R;
 
 import java.io.BufferedReader;
@@ -44,7 +45,7 @@ import org.json.JSONObject;
 
 public class GetCurrentWeather {
 
-    public void processWeatherApiCurrent(String latitude, String longitude, final String action, final Activity activity, HashMap<String, Object> extraParams) throws JSONException{
+    public void processWeatherApiCurrent(String latitude, String longitude, final String action, final Activity activity, final HashMap<String, Object> extraParams) throws JSONException{
 
         String urlString = "https://api.openweathermap.org/data/2.5/weather?lat="
                 + latitude + "&lon=" + longitude + "&APPID=" + Secrets.SECRET_FOR_WEATHER_API;
@@ -77,7 +78,7 @@ public class GetCurrentWeather {
                             returnHashMap.put(Constants.CURRENT_WEATHER_API_PROP_MAIN_TEMP, currentTemperature);
                             returnHashMap.put(Constants.CURRENT_WEATHER_API_PROP_WEATHER, currentWeather);
 
-                            updateUI(action, activity, returnHashMap);
+                            updateUI(action, activity, returnHashMap, extraParams);
 
 
                         }catch (JSONException e){
@@ -95,7 +96,7 @@ public class GetCurrentWeather {
         RequestClass.getRequestQueue().add(jsObjRequest);
     }
 
-    public void updateUI(String action, Activity activity, HashMap<String, String> returnHashMap){
+    public void updateUI(String action, Activity activity, HashMap<String, String> returnHashMap, HashMap<String,Object> extraparams){
 
         switch (action) {
             case Constants.ACTION_UPDATE_CITY_DETAIL_UI:
@@ -104,6 +105,11 @@ public class GetCurrentWeather {
                 TextView cityNameTextView = (TextView) relativeLayout.findViewById(R.id.city_detail_name_value);
                 cityNameTextView.setText(returnHashMap.get(Constants.CURRENT_WEATHER_API_PROP_WEATHER));
                 break;
+            case Constants.ACTION_UPDATE_CITY_LIST_ITEM_FOR_TEMPERATURE:
+                TextView temperatureView = (TextView) extraparams.get("temperatureView");
+                temperatureView.setText(String.valueOf(returnHashMap.get(Constants.CURRENT_WEATHER_API_PROP_MAIN_TEMP)));
+//                CityListActivity.SimpleItemRecyclerViewAdapter givenAdapter = (CityListActivity.SimpleItemRecyclerViewAdapter) extraparams.get("adapter");
+//                givenAdapter.notifyDataSetChanged();
         }
 
 

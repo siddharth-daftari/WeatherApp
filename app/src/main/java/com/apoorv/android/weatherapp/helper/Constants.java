@@ -37,6 +37,7 @@ public class Constants {
 
     public static final String ACTION_UPDATE_CITY_DETAIL_UI = "cityDetailUiUpdate";
     public static final String ACTION_UPDATE_CITY_LIST_UI_FOR_TIMEZONE = "cityListUiForTimezoneUpdate";
+    public static final String ACTION_UPDATE_CITY_LIST_ITEM_FOR_TEMPERATURE = "cityListUiForTemperature";
 
     public static final String SELECTED_PLACE = "selectedPlace";
     public static final String CITY_LIST_ADAPATER = "cityListAdapter";
