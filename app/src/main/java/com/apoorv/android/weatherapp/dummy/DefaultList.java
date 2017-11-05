@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.apoorv.android.weatherapp.CityListActivity;
 import com.apoorv.android.weatherapp.helper.Constants;
+import com.apoorv.android.weatherapp.helper.GetCurrentWeather;
 import com.apoorv.android.weatherapp.helper.GetTimeZone;
 import com.apoorv.android.weatherapp.helper.RequestClass;
 import com.apoorv.android.weatherapp.helper.SettingsPreference;
@@ -29,6 +30,7 @@ import java.util.TimeZone;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Looper;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -181,6 +183,24 @@ public class DefaultList {
         public String getTimeString() {
            return getListViewString(name,timeZone);
         }
+
+//        public String getCurrentTemperature(CityListActivity.SimpleItemRecyclerViewAdapter givenAdapter, TextView mTemperatureView, Activity a) {
+//
+//            //Create new Hashmap for API parameters
+//            HashMap<String, Object> weatherAPIMap = new HashMap<String, Object>();
+//            weatherAPIMap.put("adapter",givenAdapter);
+//            weatherAPIMap.put("temperatureView",mTemperatureView);
+//
+//
+//            //Start request Queue
+//            RequestClass.startRequestQueue();
+//            try {
+//                new GetCurrentWeather().processWeatherApiCurrent(latitude,longitude,Constants.ACTION_UPDATE_CITY_LIST_ITEM_FOR_TEMPERATURE, a,weatherAPIMap);
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//        }
+
 
         public String getListViewString(String name, String timeZoneid) {
             SimpleDateFormat df = new SimpleDateFormat();
