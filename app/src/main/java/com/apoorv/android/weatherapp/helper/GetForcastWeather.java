@@ -21,7 +21,7 @@ public class GetForcastWeather {
         HashMap returnHashMap = new HashMap<String, String>();
 
         JSONObject jsonObject = CallApi.callApi("https://api.openweathermap.org/data/2.5/forecast?lat="
-                + latitude + "&lon=" + longitude + "&APPID=" + Secrets.SECRET_FOR_WEATHER_API);
+                + latitude + "&lon=" + longitude + "&APPID=" + Secrets.SECRET_FOR_WEATHER_API + "&units=" + SettingsPreference.getSelectedUnitParam());
 
         List<CityDetailModel> cityDetailList = new ArrayList<CityDetailModel>();
         CityDetailModel cityDetailModel = null;
@@ -42,7 +42,7 @@ public class GetForcastWeather {
             cityDetailModel.setDateValue(jsonObjectTemp.getString(Constants.FORECAST_WEATHER_API_PROP_DATE));
 
             JSONObject jsonObjectMain = jsonObjectTemp.getJSONObject(Constants.FORECAST_WEATHER_API_PROP_LIST_MAIN);
-            cityDetailModel.setTemp(jsonObjectMain.getDouble(Constants.FORECAST_WEATHER_API_PROP_LIST_MAIN_TEMP));
+            cityDetailModel.setTemp(Double.valueOf((int)jsonObjectMain.getDouble(Constants.FORECAST_WEATHER_API_PROP_LIST_MAIN_TEMP)));
             cityDetailModel.setTempHigh(jsonObjectMain.getDouble(Constants.FORECAST_WEATHER_API_PROP_LIST_MAIN_TEMP_MAX));
             cityDetailModel.setTempLow(jsonObjectMain.getDouble(Constants.FORECAST_WEATHER_API_PROP_LIST_MAIN_TEMP_MIN));
 

@@ -50,7 +50,7 @@ public class GetCurrentWeather {
     public void processWeatherApiCurrent(String latitude, String longitude, final String action, final Activity activity, final HashMap<String, Object> extraParams) throws JSONException{
 
         String urlString = "https://api.openweathermap.org/data/2.5/weather?lat="
-                + latitude + "&lon=" + longitude + "&APPID=" + Secrets.SECRET_FOR_WEATHER_API;
+                + latitude + "&lon=" + longitude + "&APPID=" + Secrets.SECRET_FOR_WEATHER_API + "&units="+SettingsPreference.getSelectedUnitParam();
 
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.GET, urlString,null, new Response.Listener<JSONObject>() {
@@ -62,7 +62,7 @@ public class GetCurrentWeather {
                             HashMap returnHashMap = new HashMap<String, String>();
 
                             JSONObject jsonObjectMain = jsonObject.getJSONObject(Constants.CURRENT_WEATHER_API_PROP_MAIN);
-                            Double currentTemperature = jsonObjectMain.getDouble(Constants.CURRENT_WEATHER_API_PROP_MAIN_TEMP);
+                            Integer currentTemperature = (int) jsonObjectMain.getDouble(Constants.CURRENT_WEATHER_API_PROP_MAIN_TEMP);
                             Double temperatureMax = jsonObjectMain.getDouble(Constants.CURRENT_WEATHER_API_PROP_MAIN_TEMP_MAX);
                             Double temperatureMin = jsonObjectMain.getDouble(Constants.CURRENT_WEATHER_API_PROP_MAIN_TEMP_MIN);
 
@@ -121,7 +121,7 @@ public class GetCurrentWeather {
                 break;
             case Constants.ACTION_UPDATE_CITY_LIST_ITEM_FOR_TEMPERATURE:
                 TextView temperatureView = (TextView) extraparams.get("temperatureView");
-                temperatureView.setText(String.valueOf(returnHashMap.get(Constants.CURRENT_WEATHER_API_PROP_MAIN_TEMP)));
+                temperatureView.setText(String.valueOf(returnHashMap.get(Constants.CURRENT_WEATHER_API_PROP_MAIN_TEMP))+" "+SettingsPreference.getSelectedUnitSuffix());
 //                CityListActivity.SimpleItemRecyclerViewAdapter givenAdapter = (CityListActivity.SimpleItemRecyclerViewAdapter) extraparams.get("adapter");
 //                givenAdapter.notifyDataSetChanged();
         }
