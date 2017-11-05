@@ -65,6 +65,7 @@ import butterknife.ButterKnife;
     private boolean mPaused = false;
     private static final int START_API_MSG = 101;
     private static final int FIN_API_MSG = 303;
+    PlaceAutocompleteFragment autocompleteFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,7 +104,7 @@ import butterknife.ButterKnife;
         ItemTouchHelper helper = new ItemTouchHelper(callback);
         helper.attachToRecyclerView((RecyclerView) recyclerView);
 
-        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
+        autocompleteFragment = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
 
         AutocompleteFilter typeFilter = new AutocompleteFilter.Builder()
@@ -118,6 +119,7 @@ import butterknife.ButterKnife;
                 Log.i("Apoorv", "Place: " + place.getName());
                 Log.i("Place","Place Name: "+place.getLatLng().latitude);
                 selectedPlace = place;
+
             }
 
             @Override
@@ -126,7 +128,6 @@ import butterknife.ButterKnife;
                 Log.i("Apoorv", "An error occurred: " + status);
             }
         });
-
 
 
     }
@@ -157,6 +158,7 @@ import butterknife.ButterKnife;
 
                 try {
                     DefaultList.addCity(selectedPlace,getApplicationContext(), Constants.ACTION_UPDATE_CITY_LIST_UI_FOR_TIMEZONE, this, this.getCityListAdapter());
+                    autocompleteFragment.setText("");
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
