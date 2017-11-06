@@ -219,20 +219,33 @@ import butterknife.ButterKnife;
             holder.mCurrentTime.setText(mValues.get(position).getTimeString());
            // holder.mCurrentPreferenceUnit.setText();
 
-            //Create new Hashmap for API parameters
-            HashMap<String, Object> weatherAPIMap = new HashMap<String, Object>();
-            weatherAPIMap.put("adapter",cityListAdapter);
-            weatherAPIMap.put("temperatureView",holder.mCurrentTemperature);
+
+                if(holder.mItem.isTemperatureExpired() == true)
+                {
+                    //Create new Hashmap for API parameters
+                    HashMap<String, Object> weatherAPIMap = new HashMap<String, Object>();
+                    weatherAPIMap.put("adapter",cityListAdapter);
+                    weatherAPIMap.put("temperatureView",holder.mCurrentTemperature);
+                    weatherAPIMap.put("mItem",holder.mItem);
+
+                   // Log.i("Apoorv", "Are same"+weatherAPIMap.get("mItem").equals(mValues.get(position)));
 
 
-            //Start request Queue
-            RequestClass.startRequestQueue();
-            try {
-                new GetCurrentWeather().processWeatherApiCurrent(holder.mItem.latitude,holder.mItem.longitude,Constants.ACTION_UPDATE_CITY_LIST_ITEM_FOR_TEMPERATURE,getParent(),weatherAPIMap);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            //holder.mContentView.setText(mValues.get(position).toString());
+                    //Start request Queue
+                    RequestClass.startRequestQueue();
+                    try {
+                        Log.i("Apoorv","Made Network call for "+holder.mItem.name);
+                        new GetCurrentWeather().processWeatherApiCurrent(holder.mItem.latitude,holder.mItem.longitude,Constants.ACTION_UPDATE_CITY_LIST_ITEM_FOR_TEMPERATURE,holder.mCurrentTemperature.getContext(),weatherAPIMap);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                else
+                    holder.mCurrentTemperature.setText(holder.mItem.currentTemperature+SettingsPreference.getSelectedUnitSuffix());
+
+
+
+
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override

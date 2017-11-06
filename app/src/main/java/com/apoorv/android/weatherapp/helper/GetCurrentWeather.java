@@ -1,7 +1,9 @@
 package com.apoorv.android.weatherapp.helper;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -18,6 +20,7 @@ import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.apoorv.android.weatherapp.CityListActivity;
 import com.apoorv.android.weatherapp.R;
+import com.apoorv.android.weatherapp.dummy.DefaultList;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -47,8 +50,8 @@ import org.json.JSONObject;
 
 public class GetCurrentWeather {
 
-    public void processWeatherApiCurrent(String latitude, String longitude, final String action, final Activity activity, final HashMap<String, Object> extraParams) throws JSONException{
-
+    public void processWeatherApiCurrent(String latitude, String longitude, final String action, final Context context, final HashMap<String, Object> extraParams) throws JSONException{
+        final Activity activity = (Activity) context;
         String urlString = "https://api.openweathermap.org/data/2.5/weather?lat="
                 + latitude + "&lon=" + longitude + "&APPID=" + Secrets.SECRET_FOR_WEATHER_API + "&units="+SettingsPreference.getSelectedUnitParam();
 
@@ -83,7 +86,7 @@ public class GetCurrentWeather {
                             returnHashMap.put(Constants.CURRENT_WEATHER_API_PROP_WEATHER, currentWeather);
                             returnHashMap.put(Constants.CURRENT_WEATHER_API_PROP_WEATHER_ICON, currentWeatherIcon);
 
-                            updateUI(action, activity, returnHashMap, extraParams);
+                            updateUI(action, activity, returnHashMap, extraParams,context);
 
 
                         }catch (JSONException e){
@@ -101,7 +104,7 @@ public class GetCurrentWeather {
         RequestClass.getRequestQueue().add(jsObjRequest);
     }
 
-    public void updateUI(String action, Activity activity, HashMap<String, String> returnHashMap, HashMap<String,Object> extraparams){
+    public void updateUI(String action, Activity activity, HashMap<String, String> returnHashMap, HashMap<String,Object> extraparams,Context context){
 
         switch (action) {
             case Constants.ACTION_UPDATE_CITY_DETAIL_UI:
@@ -120,6 +123,11 @@ public class GetCurrentWeather {
 
                 break;
             case Constants.ACTION_UPDATE_CITY_LIST_ITEM_FOR_TEMPERATURE:
+                DefaultList.CityItem currentCity = (DefaultList.CityItem)extraparams.get("mItem");
+
+                Log.i("Apoorv","Activity context"+activity);
+                currentCity.recordTemperatureCapture(context,String.valueOf(returnHashMap.get(Constants.CURRENT_WEATHER_API_PROP_MAIN_TEMP)));
+                Log.i("Apoorv","Is expired API"+currentCity.isTemperatureExpired());
                 TextView temperatureView = (TextView) extraparams.get("temperatureView");
                 temperatureView.setText(String.valueOf(returnHashMap.get(Constants.CURRENT_WEATHER_API_PROP_MAIN_TEMP))+" "+SettingsPreference.getSelectedUnitSuffix());
 //                CityListActivity.SimpleItemRecyclerViewAdapter givenAdapter = (CityListActivity.SimpleItemRecyclerViewAdapter) extraparams.get("adapter");

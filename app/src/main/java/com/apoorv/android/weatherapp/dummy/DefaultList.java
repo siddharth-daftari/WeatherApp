@@ -56,7 +56,7 @@ public class DefaultList {
         for (String s: returnedset) {
             //for each city string in return set, construct a cityItem PoJo and add to the static list.
             String [] citydetails = s.split("@");
-            CityItem city1 = new CityItem(citydetails[0],citydetails[1],citydetails[2],citydetails[3],citydetails[4],citydetails[5],citydetails[6],citydetails[7]);
+            CityItem city1 = new CityItem(citydetails[0],citydetails[1],citydetails[2],citydetails[3],citydetails[4],citydetails[5],citydetails[6],citydetails[7],citydetails[8],citydetails[9]);
             if(id.equalsIgnoreCase(city1.id)){
                 cityItem = city1;
             }
@@ -74,7 +74,7 @@ public class DefaultList {
             String [] citydetails = s.split("@");
             Log.i("Apoorv", "Got a city from database, adding it to the list");
             System.out.println(citydetails[7]);
-            CityItem city1 = new CityItem(citydetails[0],citydetails[1],citydetails[2],citydetails[3],citydetails[4],citydetails[5],citydetails[6],citydetails[7]);
+            CityItem city1 = new CityItem(citydetails[0],citydetails[1],citydetails[2],citydetails[3],citydetails[4],citydetails[5],citydetails[6],citydetails[7],citydetails[8],citydetails[9]);
             addItem(city1);
             citiesset.add(city1.getDelimitedString());
         }
@@ -154,8 +154,11 @@ public class DefaultList {
         public boolean isCurrent;
         public String timeZone;
         public String cityId;
+        public static Long lastFetched;
+        public String currentTemperature;
+        public static boolean unitChanged = false;
 
-        public CityItem(String id, String name, String description, String latitude, String longitude, String isCurrent, String timeZone, String cityId) {
+        public CityItem(String id, String name, String description, String latitude, String longitude, String isCurrent, String timeZone, String cityId, String lastFetched, String currentTemperature) {
             this.id = id;
             this.name = name;
             this.description = description;
@@ -164,13 +167,43 @@ public class DefaultList {
             this.isCurrent =  Boolean.parseBoolean(isCurrent);
             this.timeZone = timeZone;
             this.cityId = cityId;
+            this.lastFetched = Long.parseLong(lastFetched);
+            this.currentTemperature = currentTemperature;
         }
 
 
         public String descriptiontoString() {
-
-
             return description+", "+getListViewString(name,timeZone);
+        }
+
+        public void recordTemperatureCapture(Context c, String currentTemperature) {
+            Log.i("Apoorv","Deleting at"+citiesset.size());
+            Log.i("Apoorv",getDelimitedString());
+            citiesset.remove(getDelimitedString());
+            lastFetched = new Date().getTime();
+            this.currentTemperature = currentTemperature;
+            Log.i("Apoorv","Apoorv setting last fetched:"+lastFetched);
+            citiesset.add(getDelimitedString());
+
+            Log.i("Apoorv","Deleted at"+citiesset.size());
+            Log.i("Apoorv",getDelimitedString());
+            writetoSharedInitial(c);
+            unitChanged = false;
+        }
+
+        public Boolean isTemperatureExpired() {
+            Log.i("Apoorv","Apoorv Last Fetched:"+lastFetched);
+            if(lastFetched == null || unitChanged == true) {
+                Log.i("Apoorv", "Returning last fetch true as null or unit changed");
+                return true;
+            }
+           else if((new Date().getTime() - lastFetched > 2*60*1000)) {
+                Log.i("Apoorv", "fetch time expired");
+                return true;
+            }
+            else
+                return false;
+
         }
 
         public String getCityName() {
@@ -216,7 +249,7 @@ public class DefaultList {
         }
 
         public String getDelimitedString() {
-            return id+"@"+name+"@"+description+"@"+latitude+"@"+longitude+"@"+isCurrent+"@"+timeZone+"@"+cityId;
+            return id+"@"+name+"@"+description+"@"+latitude+"@"+longitude+"@"+isCurrent+"@"+timeZone+"@"+cityId+"@"+lastFetched+"@"+currentTemperature;
         }
 
 

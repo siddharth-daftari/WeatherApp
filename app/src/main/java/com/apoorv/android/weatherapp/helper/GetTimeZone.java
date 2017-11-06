@@ -94,7 +94,7 @@ public class GetTimeZone {
                     newCityId = String.valueOf(Integer.parseInt(DefaultList.LISTPLACES.get(DefaultList.LISTPLACES.size()-1).id) + 1 );
                 else
                     newCityId = "1";
-                DefaultList.CityItem selectedCity = new DefaultList.CityItem(newCityId,selectedPlace.getName().toString(),selectedPlace.getAddress().toString(),String.valueOf(selectedPlace.getLatLng().latitude),String.valueOf(selectedPlace.getLatLng().longitude),Boolean.toString(false),returnHashMap.get(Constants.TIMEZONE_API_PROP_TIMEZONE_ID).toString(),selectedPlace.getId());
+                DefaultList.CityItem selectedCity = new DefaultList.CityItem(newCityId,selectedPlace.getName().toString(),selectedPlace.getAddress().toString(),String.valueOf(selectedPlace.getLatLng().latitude),String.valueOf(selectedPlace.getLatLng().longitude),Boolean.toString(false),returnHashMap.get(Constants.TIMEZONE_API_PROP_TIMEZONE_ID).toString(),selectedPlace.getId(),"33",null);
 
                 Boolean alreadyExists = false;
                 for (DefaultList.CityItem existingCity: DefaultList.LISTPLACES) {

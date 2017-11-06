@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.util.Log;
 
 import com.apoorv.android.weatherapp.CityListActivity;
+import com.apoorv.android.weatherapp.dummy.DefaultList;
 import com.apoorv.android.weatherapp.helper.Constants;
 
 import static com.apoorv.android.weatherapp.helper.Constants.TEMPERATURE_UNIT_CELSIUS;
@@ -37,7 +38,7 @@ public class SettingsPreference {
             setPreferenceFarenheit();
 
         else setPreferenceCelsius();
-
+        DefaultList.CityItem.unitChanged = true;
         adapter.notifyDataSetChanged();
         return true;
     }
