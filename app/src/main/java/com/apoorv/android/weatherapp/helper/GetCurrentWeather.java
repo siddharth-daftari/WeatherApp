@@ -62,7 +62,7 @@ public class GetCurrentWeather {
                             HashMap returnHashMap = new HashMap<String, String>();
 
                             JSONObject jsonObjectMain = jsonObject.getJSONObject(Constants.CURRENT_WEATHER_API_PROP_MAIN);
-                            Integer currentTemperature = (int) jsonObjectMain.getDouble(Constants.CURRENT_WEATHER_API_PROP_MAIN_TEMP);
+                            Double currentTemperature = jsonObjectMain.getDouble(Constants.CURRENT_WEATHER_API_PROP_MAIN_TEMP);
                             Double temperatureMax = jsonObjectMain.getDouble(Constants.CURRENT_WEATHER_API_PROP_MAIN_TEMP_MAX);
                             Double temperatureMin = jsonObjectMain.getDouble(Constants.CURRENT_WEATHER_API_PROP_MAIN_TEMP_MIN);
 
@@ -76,10 +76,10 @@ public class GetCurrentWeather {
                             System.out.println("currentWeather: " + currentWeather);
                             System.out.println("currentWeatherIcon: " + currentWeatherIcon);
 
-                            returnHashMap.put(Constants.CURRENT_WEATHER_API_PROP_MAIN_TEMP, currentTemperature);
-                            returnHashMap.put(Constants.CURRENT_WEATHER_API_PROP_MAIN_TEMP_MAX, temperatureMax);
-                            returnHashMap.put(Constants.CURRENT_WEATHER_API_PROP_MAIN_TEMP_MIN, temperatureMin);
-                            returnHashMap.put(Constants.CURRENT_WEATHER_API_PROP_MAIN_TEMP, currentTemperature);
+                            returnHashMap.put(Constants.CURRENT_WEATHER_API_PROP_MAIN_TEMP, (int)Math.round(currentTemperature));
+                            returnHashMap.put(Constants.CURRENT_WEATHER_API_PROP_MAIN_TEMP_MAX, (int)Math.round(temperatureMax));
+                            returnHashMap.put(Constants.CURRENT_WEATHER_API_PROP_MAIN_TEMP_MIN, (int)Math.round(temperatureMin));
+                            returnHashMap.put(Constants.CURRENT_WEATHER_API_PROP_MAIN_TEMP, (int)Math.round(currentTemperature));
                             returnHashMap.put(Constants.CURRENT_WEATHER_API_PROP_WEATHER, currentWeather);
                             returnHashMap.put(Constants.CURRENT_WEATHER_API_PROP_WEATHER_ICON, currentWeatherIcon);
 
@@ -116,7 +116,16 @@ public class GetCurrentWeather {
                 cityWeatherTextView.setText(returnHashMap.get(Constants.CURRENT_WEATHER_API_PROP_WEATHER));
 
                 //Setting current temperature
-                
+                TextView cityCurrentTempTextView = (TextView) relativeLayout.findViewById(R.id.city_detail_current_temp_value);
+                cityCurrentTempTextView.setText(String.valueOf(returnHashMap.get(Constants.CURRENT_WEATHER_API_PROP_MAIN_TEMP))+" "+SettingsPreference.getSelectedUnitSuffix());
+
+                //Setting Max temperature
+                TextView cityMaxTempTextView = (TextView) relativeLayout.findViewById(R.id.city_detail_max_temp_value);
+                cityMaxTempTextView.setText(String.valueOf(returnHashMap.get(Constants.CURRENT_WEATHER_API_PROP_MAIN_TEMP_MAX))+" "+SettingsPreference.getSelectedUnitSuffix());
+
+                //Setting current temperature
+                TextView cityMinTempTextView = (TextView) relativeLayout.findViewById(R.id.city_detail_min_temp_value);
+                cityMinTempTextView.setText(String.valueOf(returnHashMap.get(Constants.CURRENT_WEATHER_API_PROP_MAIN_TEMP_MIN))+" "+SettingsPreference.getSelectedUnitSuffix());
 
                 break;
             case Constants.ACTION_UPDATE_CITY_LIST_ITEM_FOR_TEMPERATURE:

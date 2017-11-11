@@ -1,11 +1,457 @@
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/city_detail"
-    style="?android:attr/textAppearanceLarge"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="16dp"
-    android:textIsSelectable="true"
-    tools:context="com.apoorv.android.weatherapp.CityDetailFragment" >
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:orientation="vertical">
 
-    </TextView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:elevation="24dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/day2_details"
+        android:orientation="vertical"
+        android:background="@layout/cardstylelook">
+
+        <TextView
+            android:id="@+id/day2_textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/text_margin"
+            android:layout_marginTop="@dimen/text_margin"
+            android:layout_weight="1"
+            android:textAppearance="?attr/textAppearanceListItem"/>
+
+        <LinearLayout
+            android:id="@+id/day2_details_row1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/day2_details_weather_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/text_margin"/>
+
+            <TextView
+                android:id="@+id/day2_details_row1_weather_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/text_margin"
+                android:layout_marginRight="@dimen/text_margin"
+                android:layout_marginTop="@dimen/text_margin"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/day2_details_row1_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/day2_details_row1_current_temp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/text_margin"
+                android:layout_marginRight="4dp"
+                android:text="@string/current_temp_desc"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/day2_details_row1_temp_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/text_margin"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/day2_details_row2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/day2_details_row2_max_temp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/text_margin"
+                android:layout_marginRight="4dp"
+                android:text="@string/max_temp_desc"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/day2_details_row2_max_temp_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/text_margin"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/day2_details_row2_min_temp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/text_margin"
+                android:layout_marginRight="4dp"
+                android:text="@string/min_temp_desc"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/day2_details_row2_min_temp_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/text_margin"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:elevation="24dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/day3_details"
+        android:orientation="vertical"
+        android:background="@layout/cardstylelook">
+
+        <TextView
+            android:id="@+id/day3_textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/text_margin"
+            android:layout_marginTop="@dimen/text_margin"
+            android:layout_weight="1"
+            android:textAppearance="?attr/textAppearanceListItem" />
+
+        <LinearLayout
+            android:id="@+id/day3_details_row1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/day3_details_weather_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/text_margin"/>
+
+            <TextView
+                android:id="@+id/day3_details_row1_weather_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/text_margin"
+                android:layout_marginRight="@dimen/text_margin"
+                android:layout_marginTop="@dimen/text_margin"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/day3_details_row1_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/day3_details_row1_current_temp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/text_margin"
+                android:layout_marginRight="4dp"
+                android:text="@string/current_temp_desc"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/day3_details_row1_temp_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/text_margin"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/day3_details_row2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/day3_details_row2_max_temp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/text_margin"
+                android:layout_marginRight="4dp"
+                android:text="@string/max_temp_desc"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/day3_details_row2_max_temp_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/text_margin"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/day3_details_row2_min_temp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/text_margin"
+                android:layout_marginRight="4dp"
+                android:text="@string/min_temp_desc"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/day3_details_row2_min_temp_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/text_margin"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:elevation="24dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/day4_details"
+        android:orientation="vertical"
+        android:background="@layout/cardstylelook">
+
+        <TextView
+            android:id="@+id/day4_textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/text_margin"
+            android:layout_marginTop="@dimen/text_margin"
+            android:layout_weight="1"
+            android:textAppearance="?attr/textAppearanceListItem"/>
+
+        <LinearLayout
+            android:id="@+id/day4_details_row1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/day4_details_weather_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/text_margin"/>
+
+            <TextView
+                android:id="@+id/day4_details_row1_weather_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/text_margin"
+                android:layout_marginRight="@dimen/text_margin"
+                android:layout_marginTop="@dimen/text_margin"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/day4_details_row1_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/day4_details_row1_current_temp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/text_margin"
+                android:layout_marginRight="4dp"
+                android:text="@string/current_temp_desc"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/day4_details_row1_temp_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/text_margin"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/day4_details_row2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/day4_details_row2_max_temp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/text_margin"
+                android:layout_marginRight="4dp"
+                android:text="@string/max_temp_desc"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/day4_details_row2_max_temp_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/text_margin"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/day4_details_row2_min_temp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/text_margin"
+                android:layout_marginRight="4dp"
+                android:text="@string/min_temp_desc"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/day4_details_row2_min_temp_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/text_margin"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:elevation="24dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/day5_details"
+        android:orientation="vertical"
+        android:background="@layout/cardstylelook"
+        >
+
+        <TextView
+            android:id="@+id/day5_textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/text_margin"
+            android:layout_marginTop="@dimen/text_margin"
+            android:layout_weight="1"
+            android:textAppearance="?attr/textAppearanceListItem"/>
+
+        <LinearLayout
+            android:id="@+id/day5_details_row1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/day5_details_weather_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/text_margin"/>
+
+            <TextView
+                android:id="@+id/day5_details_row1_weather_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/text_margin"
+                android:layout_marginRight="@dimen/text_margin"
+                android:layout_marginTop="@dimen/text_margin"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/day5_details_row1_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/day5_details_row1_current_temp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/text_margin"
+                android:layout_marginRight="4dp"
+                android:text="@string/current_temp_desc"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/day5_details_row1_temp_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/text_margin"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/day5_details_row2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/day5_details_row2_max_temp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/text_margin"
+                android:layout_marginRight="4dp"
+                android:text="@string/max_temp_desc"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/day5_details_row2_max_temp_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/text_margin"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/day5_details_row2_min_temp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/text_margin"
+                android:layout_marginRight="4dp"
+                android:text="@string/min_temp_desc"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/day5_details_row2_min_temp_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/text_margin"
+                android:layout_marginBottom="@dimen/text_margin"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
+

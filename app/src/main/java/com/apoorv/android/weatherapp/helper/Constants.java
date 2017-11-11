@@ -32,6 +32,7 @@ public class Constants {
     public static final String FORECAST_WEATHER_API_PROP_LIST_MAIN_TEMP_MAX = "temp_max";
     public static final String FORECAST_WEATHER_API_PROP_LIST_WEATHER = "weather";
     public static final String FORECAST_WEATHER_API_PROP_LIST_WEATHER_MAIN = "main";
+    public static final String FORECAST_WEATHER_API_PROP_LIST_WEATHER_ICON = "icon";
 
     public static final String TEMPERATURE_UNIT_CELSIUS = "Celsius";
     public static final String TEMPERATURE_UNIT_FARENHEIT = "Farenheit";
@@ -39,9 +40,12 @@ public class Constants {
     public static final String ACTION_UPDATE_CITY_DETAIL_UI = "cityDetailUiUpdate";
     public static final String ACTION_UPDATE_CITY_LIST_UI_FOR_TIMEZONE = "cityListUiForTimezoneUpdate";
     public static final String ACTION_UPDATE_CITY_LIST_ITEM_FOR_TEMPERATURE = "cityListUiForTemperature";
+    public static final String ACTION_UPDATE_CITY_DETAIL_UI_FOR_WEATHER = "cityDetailUiUpdateForWeather";
 
     public static final String SELECTED_PLACE = "selectedPlace";
     public static final String CITY_LIST_ADAPATER = "cityListAdapter";
+    public static final String CITY_DETAIL_LIST = "cityDetailList";
+    public static final String TIMEZONE = "timezone";
 
     public static final String ICON_01D = "icon_01d";
     public static final String ICON_01N = "icon_01n";

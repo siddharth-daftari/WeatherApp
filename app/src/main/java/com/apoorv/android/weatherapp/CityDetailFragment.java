@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import com.apoorv.android.weatherapp.dummy.DefaultList;
 import com.apoorv.android.weatherapp.dummy.DummyContent;
 import com.apoorv.android.weatherapp.helper.Constants;
 import com.apoorv.android.weatherapp.helper.GetCurrentWeather;
+import com.apoorv.android.weatherapp.helper.GetForcastWeather;
 import com.apoorv.android.weatherapp.helper.GetTimeZone;
 import com.apoorv.android.weatherapp.helper.RequestClass;
 
@@ -54,6 +56,8 @@ public class CityDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+
         try {
             if (getArguments().containsKey(ARG_ITEM_ID)) {
 
@@ -82,9 +86,15 @@ public class CityDetailFragment extends Fragment {
 
                     }
 
-                    //Setting Weather
+                    //Setting Weather and temperature
                     RequestClass.startRequestQueue();
                     new GetCurrentWeather().processWeatherApiCurrent(cityItem.latitude, cityItem.longitude, Constants.ACTION_UPDATE_CITY_DETAIL_UI, activity, null);
+
+                    //Setting today's 3 hour weather and forecast for 4 days
+                    RequestClass.startRequestQueue();
+                    HashMap hm = new HashMap<String, Object>();
+                    hm.put(Constants.TIMEZONE, cityItem.timeZone);
+                    new GetForcastWeather().processWeatherApiForecast(cityItem.latitude, cityItem.longitude, Constants.ACTION_UPDATE_CITY_DETAIL_UI_FOR_WEATHER, activity, hm);
 
                 }
             }
@@ -99,9 +109,8 @@ public class CityDetailFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.city_detail, container, false);
 
         // Show the dummy content as text in a TextView.
-        if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.city_detail)).setText("hello");
-        }
+        //((TextView) rootView.findViewById(R.id.city_detail)).setText("hello");
+
 
         return rootView;
     }

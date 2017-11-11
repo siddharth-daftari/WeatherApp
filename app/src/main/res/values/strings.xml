@@ -9,5 +9,10 @@
 
     <!-- Strings for City Detail view -->
     <string name="city_name_desc">City Name: </string>
+    <string name="current_temp_desc">Current Temperature: </string>
+    <string name="max_temp_desc">Max: </string>
+    <string name="min_temp_desc">Min: </string>
+
+    <string name="horizontal_scrollview_size">40sp</string>
 
 </resources>
