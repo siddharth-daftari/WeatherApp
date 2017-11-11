@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.apoorv.android.weatherapp.dummy.DefaultList;
 import com.apoorv.android.weatherapp.dummy.DummyContent;
 import com.apoorv.android.weatherapp.helper.Constants;
+import com.apoorv.android.weatherapp.helper.ExceptionMessageHandler;
 import com.apoorv.android.weatherapp.helper.GetCurrentWeather;
 import com.apoorv.android.weatherapp.helper.RequestClass;
 import com.apoorv.android.weatherapp.helper.SettingsPreference;
@@ -79,6 +80,8 @@ import butterknife.ButterKnife;
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
 
+        ExceptionMessageHandler.context = getApplicationContext();
+
         if (findViewById(R.id.city_detail_container) != null) {
             // The detail container view will be present only in the
             // large-screen layouts (res/values-w900dp).
@@ -127,9 +130,9 @@ import butterknife.ButterKnife;
             public void onError(Status status) {
                 // TODO: Handle the error.
                 Log.i("Apoorv", "An error occurred: " + status);
+                ExceptionMessageHandler.handleError(getApplicationContext(), status.getStatusMessage(), new Exception(), null);
             }
         });
-
 
     }
 
@@ -234,7 +237,7 @@ import butterknife.ButterKnife;
             try {
                 new GetCurrentWeather().processWeatherApiCurrent(holder.mItem.latitude,holder.mItem.longitude,Constants.ACTION_UPDATE_CITY_LIST_ITEM_FOR_TEMPERATURE,getParent(),weatherAPIMap);
             } catch (JSONException e) {
-                e.printStackTrace();
+                ExceptionMessageHandler.handleError(getApplicationContext(), e.getMessage(), e, null);
             }
             //holder.mContentView.setText(mValues.get(position).toString());
 

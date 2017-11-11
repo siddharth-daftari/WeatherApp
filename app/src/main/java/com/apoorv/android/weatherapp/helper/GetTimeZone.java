@@ -67,7 +67,7 @@ public class GetTimeZone {
 
 
                         }catch (JSONException e){
-                            e.printStackTrace();
+                            ExceptionMessageHandler.handleError(activity, e.getMessage(), e, null);
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -75,7 +75,7 @@ public class GetTimeZone {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         error.printStackTrace();
-
+                        ExceptionMessageHandler.handleError(activity, error.getMessage(), error, null);
                     }
                 });
         RequestClass.getRequestQueue().add(jsObjRequest);

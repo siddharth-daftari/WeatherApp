@@ -1,5 +1,7 @@
 package com.apoorv.android.weatherapp.helper;
 
+import android.app.Activity;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -30,13 +32,11 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class CallApi {
 
-    public static JSONObject callApi(String urlString) throws JSONException {
+    public static JSONObject callApi(String urlString) throws JSONException, IOException {
 
         String https_url = urlString;
         URL url;
         JSONObject jsonObject = null;
-
-        try {
 
             url = new URL(https_url);
             HttpsURLConnection con = (HttpsURLConnection)url.openConnection();
@@ -44,38 +44,26 @@ public class CallApi {
             String timeApiResponse = print_content(con);
             jsonObject = new JSONObject(timeApiResponse);
 
-
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         return jsonObject;
 
     }
 
-    public static String print_content(HttpsURLConnection con){
+    public static String print_content(HttpsURLConnection con) throws IOException {
         String temp ="";
         if(con!=null){
 
-            try {
+            System.out.println("****** Content of the URL ********");
+            BufferedReader br =
+                    new BufferedReader(
+                            new InputStreamReader(con.getInputStream()));
 
-                System.out.println("****** Content of the URL ********");
-                BufferedReader br =
-                        new BufferedReader(
-                                new InputStreamReader(con.getInputStream()));
+            String input;
 
-                String input;
-
-                while ((input = br.readLine()) != null){
-                    temp = temp + "\n" + input;
-                }
-                br.close();
-
-
-            } catch (IOException e) {
-                e.printStackTrace();
+            while ((input = br.readLine()) != null){
+                temp = temp + "\n" + input;
             }
+            br.close();
+
         }
         return temp;
     }
