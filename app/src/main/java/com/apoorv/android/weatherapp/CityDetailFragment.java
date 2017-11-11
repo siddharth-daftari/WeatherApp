@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,11 +42,19 @@ public class CityDetailFragment extends Fragment {
      * represents.
      */
     public static final String ARG_ITEM_ID = "item_id";
+    public static CityDetailFragment obj;
 
     /**
      * The dummy content this fragment is presenting.
      */
     private DummyContent.DummyItem mItem;
+
+    public static CityDetailFragment getInstance()
+    {
+        if (obj==null)
+            obj = new CityDetailFragment();
+        return obj;
+    }
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -57,6 +66,10 @@ public class CityDetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+        Log.i("Apoorv", "Came to detail fragment with key"+String.valueOf(getArguments().get(ARG_ITEM_ID)));
+
 
         try {
             if (getArguments().containsKey(ARG_ITEM_ID)) {
@@ -100,6 +113,7 @@ public class CityDetailFragment extends Fragment {
                     RequestClass.startRequestQueue();
                     HashMap hm = new HashMap<String, Object>();
                     hm.put(Constants.TIMEZONE, cityItem.timeZone);
+                    Log.i("Apoorv","Trying to get forcast for "+cityItem.name);
                     new GetForcastWeather().processWeatherApiForecast(cityItem.latitude, cityItem.longitude, Constants.ACTION_UPDATE_CITY_DETAIL_UI_FOR_WEATHER, activity, hm);
 
                 }

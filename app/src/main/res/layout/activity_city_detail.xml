@@ -7,6 +7,8 @@
     tools:context="com.apoorv.android.weatherapp.CityDetailActivity"
     tools:ignore="MergeRootFrame">
 
+
+
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
@@ -362,11 +364,7 @@
     </android.support.design.widget.AppBarLayout>
 
 
-    <android.support.v4.widget.NestedScrollView
-        android:id="@+id/city_detail_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
@@ -379,5 +377,10 @@
         app:srcCompat="@drawable/you_are_here_now"
         app:backgroundTint="#FFFFFF"
         android:visibility="invisible"/>
+
+    <android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </android.support.design.widget.CoordinatorLayout>

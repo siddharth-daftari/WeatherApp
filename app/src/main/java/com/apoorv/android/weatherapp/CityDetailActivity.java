@@ -4,11 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
+
+import com.apoorv.android.weatherapp.helper.CityDetailPageAdapter;
 
 /**
  * An activity representing a single City detail screen. This
@@ -25,7 +28,13 @@ public class CityDetailActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
 
+        CityDetailPageAdapter pageAdapter;
+        ViewPager mViewPager;
 
+
+        pageAdapter = new CityDetailPageAdapter(getSupportFragmentManager(),this);
+        mViewPager = (ViewPager) findViewById(R.id.pager);
+        mViewPager.setAdapter(pageAdapter);
         // Show the Up button in the action bar.
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -41,18 +50,18 @@ public class CityDetailActivity extends AppCompatActivity {
         //
         // http://developer.android.com/guide/components/fragments.html
         //
-        if (savedInstanceState == null) {
-            // Create the detail fragment and add it to the activity
-            // using a fragment transaction.
-            Bundle arguments = new Bundle();
-            arguments.putString(CityDetailFragment.ARG_ITEM_ID,
-                    getIntent().getStringExtra(CityDetailFragment.ARG_ITEM_ID));
-            CityDetailFragment fragment = new CityDetailFragment();
-            fragment.setArguments(arguments);
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.city_detail_container, fragment)
-                    .commit();
-        }
+//        if (savedInstanceState == null) {
+//            // Create the detail fragment and add it to the activity
+//            // using a fragment transaction.
+//            Bundle arguments = new Bundle();
+//            arguments.putString(CityDetailFragment.ARG_ITEM_ID,
+//                    getIntent().getStringExtra(CityDetailFragment.ARG_ITEM_ID));
+//            CityDetailFragment fragment = new CityDetailFragment();
+//            fragment.setArguments(arguments);
+//            getSupportFragmentManager().beginTransaction()
+//                    .add(R.id.city_detail_container, fragment)
+//                    .commit();
+//        }
     }
 
     @Override
