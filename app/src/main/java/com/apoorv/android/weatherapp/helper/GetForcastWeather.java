@@ -3,6 +3,7 @@ package com.apoorv.android.weatherapp.helper;
 import android.app.Activity;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -124,11 +125,12 @@ public class GetForcastWeather {
                     tempCityDetailList.add(cityDetailModel);
                     prevDate = currDate;
                 }
-                Log.i("Apoorv","ArrayList size"+arrayList.size());
+
                 if(arrayList.size()<5) {
 
                     LinearLayout fifthLayout = activity.findViewById(R.id.day5_details);
-                    fifthLayout.setVisibility(View.INVISIBLE);
+                    ((ViewGroup)fifthLayout.getParent()).removeView(fifthLayout);
+                    //fifthLayout.setVisibility(View.INVISIBLE);
                 }
 
 
@@ -140,32 +142,42 @@ public class GetForcastWeather {
 //                    }
 //                }
 
-                for (int i=0; i<arrayList.size(); i++){
+                System.out.println("------------------------Day"+"0"+"------------------------");
+                for(int i=0; i<8; i++){
+                    CityDetailModel cityDetailModel = cityDetailList.get(i);
+
+                    cityDetailModel.printValues();
+                    TextView textView = (TextView) activity.findViewById(getDay1ResourceIds(i+1).get("time"));
+                    textView.setText(new SimpleDateFormat("h:mm a").format(cityDetailModel.getDateInProperFormat()) + "  ");
+
+                    textView = (TextView) activity.findViewById(getDay1ResourceIds(i+1).get("weather"));
+                    textView.setText(cityDetailModel.getWeatherStatus().toString());
+
+                    textView = (TextView) activity.findViewById(getDay1ResourceIds(i+1).get("temp"));
+                    textView.setText(cityDetailModel.getTemp() + " " + SettingsPreference.getSelectedUnitSuffix());
+                }
+
+                for (int i=1; i<arrayList.size(); i++){
                     ArrayList<CityDetailModel> cityDetailModelList = arrayList.get(i);
                     System.out.println("------------------------Day"+i+"------------------------");
 
                     Date tempDate = cityDetailModelList.get(0).getDateInProperFormat();
                     tempDate = new Date(tempDate.getYear(), tempDate.getMonth(), tempDate.getDate(), 12, 00);
-                    Date nearestToNoonTime = nearestToNoonTime(CityDetailModel.listOfDates, tempDate);
+                    ArrayList<Date> listOfDates = new ArrayList<Date>();
+                    for(int k=0; k<cityDetailModelList.size(); k++){
+                        listOfDates.add(cityDetailModelList.get(k).getDateInProperFormat());
+                    }
+                    Date nearestToNoonTime = nearestNoonTime(listOfDates, tempDate);
+                    listOfDates.clear();
 
                     for (int j=0; j<cityDetailModelList.size(); j++){
                         CityDetailModel cityDetailModel = cityDetailModelList.get(j);
+                        TextView textView = null;
                         switch(i){
-                            case 0:
-                                cityDetailModel.printValues();
-                                TextView textView = (TextView) activity.findViewById(getDay1ResourceIds(j).get("time"));
-                                textView.setText(new SimpleDateFormat("h:mm a").format(cityDetailModel.getDateInProperFormat()) + "  ");
-
-                                textView = (TextView) activity.findViewById(getDay1ResourceIds(j).get("weather"));
-                                textView.setText(cityDetailModel.getWeatherStatus().toString());
-
-                                textView = (TextView) activity.findViewById(getDay1ResourceIds(j).get("temp"));
-                                textView.setText(cityDetailModel.getTemp() + " " + SettingsPreference.getSelectedUnitSuffix());
-                                break;
                             case 1:
-                                cityDetailModel.printValues();
-
+                                System.out.println("nearestToNoonTime: "+nearestToNoonTime + "cityDetailModel.getDateInProperFormat(): " + cityDetailModel.getDateInProperFormat());
                                 if(nearestToNoonTime.compareTo(cityDetailModel.getDateInProperFormat()) == 0) {
+                                    cityDetailModel.printValues();
                                     textView = (TextView) activity.findViewById(R.id.day2_textView);
                                     Date date = cityDetailModel.getDateInProperFormat();
                                     textView.setText(new SimpleDateFormat("EEEE").format(date));
@@ -186,14 +198,12 @@ public class GetForcastWeather {
                                     textView = (TextView) activity.findViewById(R.id.day2_details_row2_min_temp_value);
                                     textView.setText(cityDetailModel.getTempLow() + " " + SettingsPreference.getSelectedUnitSuffix());
                                 }
-
                                 break;
-
                             case 2:
-                                cityDetailModel.printValues();
-
+                                System.out.println("nearestToNoonTime: "+nearestToNoonTime + "cityDetailModel.getDateInProperFormat(): " + cityDetailModel.getDateInProperFormat());
                                 if(nearestToNoonTime.compareTo(cityDetailModel.getDateInProperFormat()) == 0) {
 
+                                    cityDetailModel.printValues();
                                     textView = (TextView) activity.findViewById(R.id.day3_textView);
                                     Date date = cityDetailModel.getDateInProperFormat();
                                     textView.setText(new SimpleDateFormat("EEEE").format(date));
@@ -214,14 +224,12 @@ public class GetForcastWeather {
                                     textView = (TextView) activity.findViewById(R.id.day3_details_row2_min_temp_value);
                                     textView.setText(cityDetailModel.getTempLow() + " " + SettingsPreference.getSelectedUnitSuffix());
                                 }
-
                                 break;
-
                             case 3:
-                                cityDetailModel.printValues();
-
+                                System.out.println("nearestToNoonTime: "+nearestToNoonTime + "cityDetailModel.getDateInProperFormat(): " + cityDetailModel.getDateInProperFormat());
                                 if(nearestToNoonTime.compareTo(cityDetailModel.getDateInProperFormat()) == 0) {
 
+                                    cityDetailModel.printValues();
                                     textView = (TextView) activity.findViewById(R.id.day4_textView);
                                     Date date = cityDetailModel.getDateInProperFormat();
                                     textView.setText(new SimpleDateFormat("EEEE").format(date));
@@ -242,14 +250,12 @@ public class GetForcastWeather {
                                     textView = (TextView) activity.findViewById(R.id.day4_details_row2_min_temp_value);
                                     textView.setText(cityDetailModel.getTempLow() + " " + SettingsPreference.getSelectedUnitSuffix());
                                 }
-
                                 break;
-
                             case 4:
-                                cityDetailModel.printValues();
+                                System.out.println("nearestToNoonTime: "+nearestToNoonTime + "cityDetailModel.getDateInProperFormat(): " + cityDetailModel.getDateInProperFormat());
+                                if(nearestToNoonTime.compareTo(cityDetailModel.getDateInProperFormat()) <= 0) {
 
-                                if(nearestToNoonTime.compareTo(cityDetailModel.getDateInProperFormat()) == 0) {
-
+                                    cityDetailModel.printValues();
                                     textView = (TextView) activity.findViewById(R.id.day5_textView);
                                     Date date = cityDetailModel.getDateInProperFormat();
                                     textView.setText(new SimpleDateFormat("EEEE").format(date));
@@ -270,23 +276,15 @@ public class GetForcastWeather {
                                     textView = (TextView) activity.findViewById(R.id.day5_details_row2_min_temp_value);
                                     textView.setText(cityDetailModel.getTempLow() + " " + SettingsPreference.getSelectedUnitSuffix());
                                 }
-
                                 break;
                         }
                     }
                 }
-
-                if(arrayList.size()<4) {
-
-                    LinearLayout fifthLayout = activity.findViewById(R.id.day5_details);
-                    fifthLayout.setVisibility(View.INVISIBLE);
-                }
-
                 break;
         }
     }
 
-    public Date nearestToNoonTime(List<Date> dates, Date date){
+    public Date nearestNoonTime(List<Date> dates, Date date){
         final long now = date.getTime();
 
         Date closest = Collections.min(dates, new Comparator<Date>() {

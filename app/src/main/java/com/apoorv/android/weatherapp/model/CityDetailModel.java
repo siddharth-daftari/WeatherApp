@@ -22,7 +22,6 @@ public class CityDetailModel {
     private int index;
     private String dateValue;
     private Date dateInProperFormat;
-    public static ArrayList<Date> listOfDates = new ArrayList<Date>();
 
     public String getDateValue() {
         return dateValue;
@@ -30,7 +29,6 @@ public class CityDetailModel {
     public void setDateValue(String dateValue, String timezone) throws ParseException {
         this.dateValue = dateValue;
         this.dateInProperFormat = getTimeInLocal(dateValue, timezone);
-        this.listOfDates.add(dateInProperFormat);
     }
 
     public Date getTimeInLocal(String date, String timezone) throws ParseException {
