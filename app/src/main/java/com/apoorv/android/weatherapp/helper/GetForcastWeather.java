@@ -124,7 +124,7 @@ public class GetForcastWeather {
                     tempCityDetailList.add(cityDetailModel);
                     prevDate = currDate;
                 }
-                Log.i("Apoorv","ArrayList size"+arrayList.size());
+
                 if(arrayList.size()<5) {
 
                     LinearLayout fifthLayout = activity.findViewById(R.id.day5_details);

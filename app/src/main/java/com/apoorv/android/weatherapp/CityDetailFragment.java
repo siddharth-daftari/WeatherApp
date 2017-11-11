@@ -3,6 +3,7 @@ package com.apoorv.android.weatherapp;
 import android.app.Activity;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -71,6 +72,12 @@ public class CityDetailFragment extends Fragment {
                     //Setting city name
                     TextView cityNameTextView = (TextView) relativeLayout.findViewById(R.id.city_detail_name_value);
                     cityNameTextView.setText(cityItem.name);
+
+                    //Setting "You are here" icon
+                    FloatingActionButton floatingActionButton = (FloatingActionButton)activity.findViewById(R.id.fab);
+                    if(floatingActionButton != null && cityItem.isCurrent){
+                        floatingActionButton.setVisibility(View.VISIBLE);
+                    }
 
                     //Setting day date
                     TextView cityDetailDate = (TextView) relativeLayout.findViewById(R.id.city_detail_date);
