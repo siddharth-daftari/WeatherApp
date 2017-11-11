@@ -85,9 +85,9 @@ public class GetForcastWeather {
                             updateUI(action, activity, returnHashMap, extraParams);
 
                         }catch (JSONException e){
-                            e.printStackTrace();
+                            ExceptionMessageHandler.handleError(activity, e.getMessage(), e, null);
                         }catch (ParseException e){
-                            e.printStackTrace();
+                            ExceptionMessageHandler.handleError(activity, e.getMessage(), e, null);
                         }
                     }
                 }, new Response.ErrorListener() {

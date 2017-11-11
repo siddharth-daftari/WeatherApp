@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.apoorv.android.weatherapp.dummy.DefaultList;
 import com.apoorv.android.weatherapp.dummy.DummyContent;
 import com.apoorv.android.weatherapp.helper.Constants;
+import com.apoorv.android.weatherapp.helper.ExceptionMessageHandler;
 import com.apoorv.android.weatherapp.helper.GetCurrentWeather;
 import com.apoorv.android.weatherapp.helper.GetForcastWeather;
 import com.apoorv.android.weatherapp.helper.GetTimeZone;
@@ -56,8 +57,6 @@ public class CityDetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
 
         try {
             if (getArguments().containsKey(ARG_ITEM_ID)) {
@@ -106,7 +105,7 @@ public class CityDetailFragment extends Fragment {
                 }
             }
         } catch (JSONException e) {
-            e.printStackTrace();
+            ExceptionMessageHandler.handleError(getActivity(), e.getMessage(), e, null);
         }
     }
 
