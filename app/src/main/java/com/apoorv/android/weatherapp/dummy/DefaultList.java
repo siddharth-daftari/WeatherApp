@@ -130,6 +130,31 @@ public class DefaultList {
         writetoSharedInitial(context);
     }
 
+
+    public static void updateCurrentCity(int position, CityItem city, Context c) {
+
+
+        CityItem existingCurrentCity = null;
+        for (CityItem existingCity: LISTPLACES
+             ) {
+            if(existingCity.isCurrent == true)
+                existingCurrentCity = existingCity;
+        }
+
+        if(existingCurrentCity!=null) {
+            citiesset.remove(existingCurrentCity.getDelimitedString());
+            Log.i("Apoorv",existingCurrentCity.name+" is no longer default");
+            existingCurrentCity.isCurrent = false;
+            citiesset.add(existingCurrentCity.getDelimitedString());
+        }
+        CityItem cityToBeUpdated = LISTPLACES.get(position);
+        Log.i("Apoorv","Marking city for default"+cityToBeUpdated.getDelimitedString());
+        citiesset.remove(cityToBeUpdated.getDelimitedString());
+        cityToBeUpdated.isCurrent = true;
+        citiesset.add(cityToBeUpdated.getDelimitedString());
+        writetoSharedInitial(c);
+    }
+
 //    static {
 //        citiesset.add(defaultCities[0]);
 //        citiesset.add(defaultCities[1]);

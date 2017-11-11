@@ -2,6 +2,7 @@ package com.apoorv.android.weatherapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -65,6 +66,7 @@ import butterknife.ButterKnife;
     private boolean mPaused = false;
     private static final int START_API_MSG = 101;
     private static final int FIN_API_MSG = 303;
+    PlaceAutocompleteFragment autocompleteFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,7 +105,7 @@ import butterknife.ButterKnife;
         ItemTouchHelper helper = new ItemTouchHelper(callback);
         helper.attachToRecyclerView((RecyclerView) recyclerView);
 
-        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
+        autocompleteFragment = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
 
         AutocompleteFilter typeFilter = new AutocompleteFilter.Builder()
@@ -118,6 +120,7 @@ import butterknife.ButterKnife;
                 Log.i("Apoorv", "Place: " + place.getName());
                 Log.i("Place","Place Name: "+place.getLatLng().latitude);
                 selectedPlace = place;
+
             }
 
             @Override
@@ -126,7 +129,6 @@ import butterknife.ButterKnife;
                 Log.i("Apoorv", "An error occurred: " + status);
             }
         });
-
 
 
     }
@@ -157,6 +159,7 @@ import butterknife.ButterKnife;
 
                 try {
                     DefaultList.addCity(selectedPlace,getApplicationContext(), Constants.ACTION_UPDATE_CITY_LIST_UI_FOR_TIMEZONE, this, this.getCityListAdapter());
+                    autocompleteFragment.setText("");
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -215,6 +218,9 @@ import butterknife.ButterKnife;
             holder.mNameView.setText(mValues.get(position).getCityName());
             holder.mContentView.setText(mValues.get(position).getCityDescription());
             holder.mCurrentTime.setText(mValues.get(position).getTimeString());
+            if(holder.mItem.isCurrent) holder.mView.setBackgroundColor(Color.parseColor("#F0F4C3"));
+            else
+                holder.mView.setBackgroundColor(Color.parseColor("#1F000000"));
            // holder.mCurrentPreferenceUnit.setText();
 
             //Create new Hashmap for API parameters
@@ -250,6 +256,19 @@ import butterknife.ButterKnife;
 
                         context.startActivity(intent);
                     }
+                }
+            });
+
+            holder.mView.setOnLongClickListener(new View.OnLongClickListener(){
+
+                @Override
+                public boolean onLongClick(View view) {
+                    Log.i("Apoorv", "Item long clicked"+holder.mItem.getUniqueDelimitedString());
+                    DefaultList.updateCurrentCity(holder.getAdapterPosition(),holder.mItem,getApplicationContext());
+                    Toast.makeText(getApplicationContext(),"Updated Current City",Toast.LENGTH_SHORT).show();
+                    cityListAdapter.notifyDataSetChanged();
+                   // holder.mView.setBackgroundColor(Color.parseColor("#F0F4C3"));
+                    return  true;
                 }
             });
 
