@@ -2,6 +2,7 @@ package com.apoorv.android.weatherapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -217,6 +218,9 @@ import butterknife.ButterKnife;
             holder.mNameView.setText(mValues.get(position).getCityName());
             holder.mContentView.setText(mValues.get(position).getCityDescription());
             holder.mCurrentTime.setText(mValues.get(position).getTimeString());
+            if(holder.mItem.isCurrent) holder.mView.setBackgroundColor(Color.parseColor("#F0F4C3"));
+            else
+                holder.mView.setBackgroundColor(Color.parseColor("#1F000000"));
            // holder.mCurrentPreferenceUnit.setText();
 
             //Create new Hashmap for API parameters
@@ -252,6 +256,19 @@ import butterknife.ButterKnife;
 
                         context.startActivity(intent);
                     }
+                }
+            });
+
+            holder.mView.setOnLongClickListener(new View.OnLongClickListener(){
+
+                @Override
+                public boolean onLongClick(View view) {
+                    Log.i("Apoorv", "Item long clicked"+holder.mItem.getUniqueDelimitedString());
+                    DefaultList.updateCurrentCity(holder.getAdapterPosition(),holder.mItem,getApplicationContext());
+                    Toast.makeText(getApplicationContext(),"Updated Current City",Toast.LENGTH_SHORT).show();
+                    cityListAdapter.notifyDataSetChanged();
+                   // holder.mView.setBackgroundColor(Color.parseColor("#F0F4C3"));
+                    return  true;
                 }
             });
 
