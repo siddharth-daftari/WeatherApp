@@ -1,8 +1,12 @@
 package com.apoorv.android.weatherapp.model;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * Created by siddharthdaftari on 11/2/17.
@@ -10,6 +14,7 @@ import java.util.Date;
 
 public class CityDetailModel {
     private String cityName;
+    private String weatherIcon;
     private String weatherStatus;
     private Double temp;
     private Double tempHigh;
@@ -17,14 +22,40 @@ public class CityDetailModel {
     private int index;
     private String dateValue;
     private Date dateInProperFormat;
+    public static ArrayList<Date> listOfDates = new ArrayList<Date>();
 
     public String getDateValue() {
         return dateValue;
     }
-    public void setDateValue(String dateValue) throws ParseException {
+    public void setDateValue(String dateValue, String timezone) throws ParseException {
         this.dateValue = dateValue;
-        dateInProperFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dateValue);
+        this.dateInProperFormat = getTimeInLocal(dateValue, timezone);
+        this.listOfDates.add(dateInProperFormat);
+    }
 
+    public Date getTimeInLocal(String date, String timezone) throws ParseException {
+        //SimpleDateFormat df = new SimpleDateFormat("h:mm a");
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        df.setTimeZone(TimeZone.getTimeZone("GMT"));
+        Date dateTemp = df.parse(date);
+
+        DateFormat df1 = new SimpleDateFormat();
+        df1.setTimeZone(TimeZone.getTimeZone(timezone));
+        dateTemp = new Date(df1.format(dateTemp));
+
+        df1.setTimeZone(Calendar.getInstance().getTimeZone());
+
+        return dateTemp;
+    }
+
+    public Date getDateInProperFormat() {
+        return this.dateInProperFormat;
+    }
+    public String getWeatherIcon() {
+        return weatherIcon;
+    }
+    public void setWeatherIcon(String weatherIcon) {
+        this.weatherIcon = weatherIcon;
     }
     public String getCityName() {
         return cityName;
@@ -38,20 +69,20 @@ public class CityDetailModel {
     public void setWeatherStatus(String weatherStatus) {
         this.weatherStatus = weatherStatus;
     }
-    public Double getTemp() {
-        return temp;
+    public int getTemp() {
+        return (int)Math.round(temp);
     }
     public void setTemp(Double temp) {
         this.temp = temp;
     }
-    public Double getTempHigh() {
-        return tempHigh;
+    public int getTempHigh() {
+        return (int)Math.round(tempHigh);
     }
     public void setTempHigh(Double tempHigh) {
         this.tempHigh = tempHigh;
     }
-    public Double getTempLow() {
-        return tempLow;
+    public int getTempLow() {
+        return (int)Math.round(tempLow);
     }
     public void setTempLow(Double tempLow) {
         this.tempLow = tempLow;
@@ -70,6 +101,7 @@ public class CityDetailModel {
                 + "  tempHigh: " + tempHigh
                 + "  tempLow: " + tempLow
                 + "  index: " + index
+                + "  dateValue: " + dateValue
                 + "  dateInProperFormat: " + dateInProperFormat);
     }
 
