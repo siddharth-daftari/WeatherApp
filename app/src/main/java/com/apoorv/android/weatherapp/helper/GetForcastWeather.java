@@ -35,7 +35,6 @@ import java.util.List;
 
 public class GetForcastWeather {
 
-    //    public void processWeatherApiForecast(String latitude, String longitude, final String action, final Activity activity, final HashMap<String, Object> extraParams) throws JSONException{
     public void processWeatherApiForecast(final Context context, String latitude, String longitude, final String action, final View view, final HashMap<String, Object> extraParams) throws JSONException {
 
         String urlString = "https://api.openweathermap.org/data/2.5/forecast?lat="
@@ -84,13 +83,12 @@ public class GetForcastWeather {
                             }
 
                             extraParams.put(Constants.CITY_DETAIL_LIST, cityDetailList);
-//                            updateUI(action, activity, returnHashMap, extraParams);
                             updateUI(context, action, view, returnHashMap, extraParams);
 
                         } catch (JSONException e) {
-//                            ExceptionMessageHandler.handleError(activity, e.getMessage(), e, null);
+                           ExceptionMessageHandler.handleError(context, e.getMessage(), e, null);
                         } catch (ParseException e) {
-//                            ExceptionMessageHandler.handleError(activity, e.getMessage(), e, null);
+                            ExceptionMessageHandler.handleError(context, e.getMessage(), e, null);
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -104,7 +102,6 @@ public class GetForcastWeather {
         RequestClass.getRequestQueue().add(jsObjRequest);
     }
 
-    //    public void updateUI(String action, Activity activity, HashMap<String, String> returnHashMap, HashMap<String,Object> extraparams) throws ParseException {
     public void updateUI(Context context, String action, View activity, HashMap<String, String> returnHashMap, HashMap<String, Object> extraparams) throws ParseException {
 
         switch (action) {
@@ -134,17 +131,8 @@ public class GetForcastWeather {
 
                     LinearLayout fifthLayout = activity.findViewById(R.id.day5_details);
                     ((ViewGroup) fifthLayout.getParent()).removeView(fifthLayout);
-                    //fifthLayout.setVisibility(View.INVISIBLE);
                 }
 
-
-//                System.out.println("--------------------> " + arrayList.size());
-//                for (int i=0; i<arrayList.size(); i++){
-//                    System.out.println("--------------------> " + arrayList.get(i).size());
-//                    for(int j=0; j<arrayList.get(i).size(); j++){
-//                        arrayList.get(i).get(j).printValues();
-//                    }
-//                }
 
                 System.out.println("------------------------Day" + "0" + "------------------------");
                 for (int i = 0; i < 8; i++) {

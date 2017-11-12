@@ -24,7 +24,6 @@ import java.util.HashMap;
 
 public class GetCurrentWeather {
 
-//    public void processWeatherApiCurrent(String latitude, String longitude, final String action, final Activity activity, final HashMap<String, Object> extraParams) throws JSONException{
     public void processWeatherApiCurrent(final Context context, String latitude, String longitude, final String action, final View view, final HashMap<String, Object> extraParams) throws JSONException{
 
         String urlString = "https://api.openweathermap.org/data/2.5/weather?lat="
@@ -48,11 +47,11 @@ public class GetCurrentWeather {
                             String currentWeather = jsonObjectWeather.getString(Constants.CURRENT_WEATHER_API_PROP_WEATHER_MAIN);
                             String currentWeatherIcon = jsonObjectWeather.getString(Constants.CURRENT_WEATHER_API_PROP_WEATHER_ICON);
 
-                            System.out.println("currentTemperature: " + currentTemperature);
-                            System.out.println("temperatureMax: " + temperatureMax);
-                            System.out.println("temperatureMin: " + temperatureMin);
-                            System.out.println("currentWeather: " + currentWeather);
-                            System.out.println("currentWeatherIcon: " + currentWeatherIcon);
+                            LogHelper.logMessage("Apoorv","currentTemperature: " + currentTemperature);
+                            LogHelper.logMessage("Apoorv","temperatureMax: " + temperatureMax);
+                            LogHelper.logMessage("Apoorv","temperatureMin: " + temperatureMin);
+                            LogHelper.logMessage("Apoorv","currentWeather: " + currentWeather);
+                            LogHelper.logMessage("Apoorv","currentWeatherIcon: " + currentWeatherIcon);
 
                             returnHashMap.put(Constants.CURRENT_WEATHER_API_PROP_MAIN_TEMP, (int)Math.round(currentTemperature));
                             returnHashMap.put(Constants.CURRENT_WEATHER_API_PROP_MAIN_TEMP_MAX, (int)Math.round(temperatureMax));
@@ -65,7 +64,7 @@ public class GetCurrentWeather {
 
 
                         }catch (JSONException e){
-//                            ExceptionMessageHandler.handleError(activity, e.getMessage(), e, null);
+                          ExceptionMessageHandler.handleError(context, e.getMessage(), e, null);
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -73,7 +72,7 @@ public class GetCurrentWeather {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         error.printStackTrace();
-//                        ExceptionMessageHandler.handleError(activity, error.getMessage(), error, null);
+                       ExceptionMessageHandler.handleError(context, error.getMessage(), error, null);
                     }
                 });
         RequestClass.getRequestQueue().add(jsObjRequest);
@@ -109,8 +108,6 @@ public class GetCurrentWeather {
             case Constants.ACTION_UPDATE_CITY_LIST_ITEM_FOR_TEMPERATURE:
                 TextView temperatureView = (TextView) extraparams.get("temperatureView");
                 temperatureView.setText(String.valueOf(returnHashMap.get(Constants.CURRENT_WEATHER_API_PROP_MAIN_TEMP))+" "+SettingsPreference.getSelectedUnitSuffix());
-//                CityListActivity.SimpleItemRecyclerViewAdapter givenAdapter = (CityListActivity.SimpleItemRecyclerViewAdapter) extraparams.get("adapter");
-//                givenAdapter.notifyDataSetChanged();
         }
     }
 

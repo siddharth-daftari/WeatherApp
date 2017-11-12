@@ -25,6 +25,7 @@ import com.apoorv.android.weatherapp.helper.ExceptionMessageHandler;
 import com.apoorv.android.weatherapp.helper.GetCurrentWeather;
 import com.apoorv.android.weatherapp.helper.GetForcastWeather;
 import com.apoorv.android.weatherapp.helper.GetTimeZone;
+import com.apoorv.android.weatherapp.helper.LogHelper;
 import com.apoorv.android.weatherapp.helper.RequestClass;
 
 import org.json.JSONException;
@@ -42,24 +43,8 @@ import java.util.Date;
  * on handsets.
  */
 public class CityDetailFragment extends Fragment {
-    /**
-     * The fragment argument representing the item ID that this fragment
-     * represents.
-     */
     public static final String ARG_ITEM_ID = "item_id";
     public static CityDetailFragment obj;
-
-    /**
-     * The dummy content this fragment is presenting.
-     */
-    private DummyContent.DummyItem mItem;
-
-    public static CityDetailFragment getInstance()
-    {
-        if (obj==null)
-            obj = new CityDetailFragment();
-        return obj;
-    }
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -72,14 +57,12 @@ public class CityDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Log.i("Apoorv", "Came to detail fragment with key"+String.valueOf(getArguments().get(ARG_ITEM_ID)));
+        LogHelper.logMessage("Apoorv", "Came to detail fragment with key"+String.valueOf(getArguments().get(ARG_ITEM_ID)));
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-//
 
         View rootView = inflater.inflate(R.layout.city_detail, container, false);
 
@@ -96,7 +79,7 @@ public class CityDetailFragment extends Fragment {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               Log.i("Apoorv","Back button pressed");
+               LogHelper.logMessage("Apoorv","Back button pressed");
                 getActivity().navigateUpTo(new Intent(getActivity(), CityListActivity.class));
             }
         });
@@ -109,7 +92,6 @@ public class CityDetailFragment extends Fragment {
                 HashMap<String, String> responseHashMap = null;
 
                 RelativeLayout relativeLayout = rootView.findViewById(R.id.city_detail_relative_layout);
-//                DefaultList.CityItem cityItem = DefaultList.getCityDetails(this.getContext(), String.valueOf(getArguments().get(ARG_ITEM_ID)));
                 int index = getArguments().getInt(ARG_ITEM_ID);
                 System.out.println("swami: "+index);
                 DefaultList.CityItem cityItem = DefaultList.getCityDetails(this.getContext(), index);
@@ -148,7 +130,7 @@ public class CityDetailFragment extends Fragment {
                     RequestClass.startRequestQueue();
                     HashMap hm = new HashMap<String, Object>();
                     hm.put(Constants.TIMEZONE, cityItem.timeZone);
-                    Log.i("Apoorv","Trying to get forcast for "+cityItem.name);
+                    LogHelper.logMessage("Apoorv","Trying to get forcast for "+cityItem.name);
                     new GetForcastWeather().processWeatherApiForecast(getContext(), cityItem.latitude, cityItem.longitude, Constants.ACTION_UPDATE_CITY_DETAIL_UI_FOR_WEATHER, rootView, hm);
 
                 }

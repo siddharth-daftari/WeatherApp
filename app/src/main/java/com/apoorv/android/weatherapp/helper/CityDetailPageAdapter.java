@@ -27,7 +27,6 @@ public class CityDetailPageAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         CityDetailFragment currentCityDetailFragment = new CityDetailFragment();
         Bundle args = new Bundle();
-//        args.putString(CityDetailFragment.ARG_ITEM_ID, String.valueOf(position));
         args.putInt(CityDetailFragment.ARG_ITEM_ID, position);
         currentCityDetailFragment.setArguments(args);
         return currentCityDetailFragment;
