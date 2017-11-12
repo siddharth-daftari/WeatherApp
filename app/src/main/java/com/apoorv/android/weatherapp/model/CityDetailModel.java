@@ -70,17 +70,26 @@ public class CityDetailModel {
     public int getTemp() {
         return (int)Math.round(temp);
     }
+    public Double getTempInDouble() {
+        return temp;
+    }
     public void setTemp(Double temp) {
         this.temp = temp;
     }
     public int getTempHigh() {
         return (int)Math.round(tempHigh);
     }
+    public Double getTempHighInDouble() {
+        return tempHigh;
+    }
     public void setTempHigh(Double tempHigh) {
         this.tempHigh = tempHigh;
     }
     public int getTempLow() {
         return (int)Math.round(tempLow);
+    }
+    public Double getTempLowInDouble() {
+        return tempLow;
     }
     public void setTempLow(Double tempLow) {
         this.tempLow = tempLow;

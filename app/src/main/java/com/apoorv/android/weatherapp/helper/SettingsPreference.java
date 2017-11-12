@@ -42,8 +42,6 @@ public class SettingsPreference {
         return true;
     }
     public static String getTemperaturePreference () {
-
-        LogHelper.logMessage("Apoorv", "Get preference :"+temperaturePreference);
         return temperaturePreference;
     }
 
