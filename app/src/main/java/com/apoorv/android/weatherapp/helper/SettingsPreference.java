@@ -23,12 +23,12 @@ public class SettingsPreference {
 
     public  static void setPreferenceCelsius() {
 
-        Log.i("Apoorv", "Set preference Celsius");
+        LogHelper.logMessage("Apoorv", "Set preference Celsius");
         temperaturePreference = TEMPERATURE_UNIT_CELSIUS;
     }
 
     public static void setPreferenceFarenheit() {
-        Log.i("Apoorv", "Set preference Farenheit");
+        LogHelper.logMessage("Apoorv", "Set preference Farenheit");
         temperaturePreference = TEMPERATURE_UNIT_FARENHEIT;
     }
 
@@ -43,7 +43,7 @@ public class SettingsPreference {
     }
     public static String getTemperaturePreference () {
 
-        Log.i("Apoorv", "Get preference :"+temperaturePreference);
+        LogHelper.logMessage("Apoorv", "Get preference :"+temperaturePreference);
         return temperaturePreference;
     }
 

@@ -1,6 +1,7 @@
 package com.apoorv.android.weatherapp.helper;
 
 import android.app.Activity;
+import android.content.Context;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,14 +35,14 @@ import java.util.List;
 
 public class GetForcastWeather {
 
-    public void processWeatherApiForecast(String latitude, String longitude, final String action, final Activity activity, final HashMap<String, Object> extraParams) throws JSONException{
+    public void processWeatherApiForecast(final Context context, String latitude, String longitude, final String action, final View view, final HashMap<String, Object> extraParams) throws JSONException {
 
         String urlString = "https://api.openweathermap.org/data/2.5/forecast?lat="
                 + latitude + "&lon=" + longitude + "&APPID=" + Secrets.SECRET_FOR_WEATHER_API + "&units=" + SettingsPreference.getSelectedUnitParam();
 
 
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                (Request.Method.GET, urlString,null, new Response.Listener<JSONObject>() {
+                (Request.Method.GET, urlString, null, new Response.Listener<JSONObject>() {
 
                     @Override
                     public void onResponse(JSONObject jsonObject) {
@@ -59,9 +60,9 @@ public class GetForcastWeather {
                             JSONArray jsonArrayList = jsonObject.getJSONArray(Constants.FORECAST_WEATHER_API_PROP_LIST);
 
                             int index = 0;
-                            for(int i=0; i<jsonArrayList.length(); i++){
+                            for (int i = 0; i < jsonArrayList.length(); i++) {
                                 cityDetailModel = new CityDetailModel();
-                                jsonObjectTemp = (JSONObject)jsonArrayList.get(i);
+                                jsonObjectTemp = (JSONObject) jsonArrayList.get(i);
 
                                 cityDetailModel.setCityName(cityName);
                                 cityDetailModel.setDateValue(jsonObjectTemp.getString(Constants.FORECAST_WEATHER_API_PROP_DATE), extraParams.get(Constants.TIMEZONE).toString());
@@ -82,12 +83,12 @@ public class GetForcastWeather {
                             }
 
                             extraParams.put(Constants.CITY_DETAIL_LIST, cityDetailList);
-                            updateUI(action, activity, returnHashMap, extraParams);
+                            updateUI(context, action, view, returnHashMap, extraParams);
 
-                        }catch (JSONException e){
-                            ExceptionMessageHandler.handleError(activity, e.getMessage(), e, null);
-                        }catch (ParseException e){
-                            ExceptionMessageHandler.handleError(activity, e.getMessage(), e, null);
+                        } catch (JSONException e) {
+                           ExceptionMessageHandler.handleError(context, e.getMessage(), e, null);
+                        } catch (ParseException e) {
+                            ExceptionMessageHandler.handleError(context, e.getMessage(), e, null);
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -101,7 +102,7 @@ public class GetForcastWeather {
         RequestClass.getRequestQueue().add(jsObjRequest);
     }
 
-    public void updateUI(String action, Activity activity, HashMap<String, String> returnHashMap, HashMap<String,Object> extraparams) throws ParseException {
+    public void updateUI(Context context, String action, View activity, HashMap<String, String> returnHashMap, HashMap<String, Object> extraparams) throws ParseException {
 
         switch (action) {
             case Constants.ACTION_UPDATE_CITY_DETAIL_UI_FOR_WEATHER:
@@ -112,12 +113,12 @@ public class GetForcastWeather {
                 //Segregating the list by day
                 Date prevDate = null;
                 ArrayList<CityDetailModel> tempCityDetailList = new ArrayList<CityDetailModel>();
-                for(int i=0; i<cityDetailList.size(); i++){
+                for (int i = 0; i < cityDetailList.size(); i++) {
 
                     CityDetailModel cityDetailModel = cityDetailList.get(i);
                     Date currDate = cityDetailModel.getDateInProperFormat();
 
-                    if(prevDate != null && prevDate.getDate() != currDate.getDate()){
+                    if (prevDate != null && prevDate.getDate() != currDate.getDate()) {
                         arrayList.add(tempCityDetailList);
                         tempCityDetailList = new ArrayList<CityDetailModel>();
                     }
@@ -126,57 +127,48 @@ public class GetForcastWeather {
                     prevDate = currDate;
                 }
 
-                if(arrayList.size()<5) {
+                if (arrayList.size() < 5) {
 
                     LinearLayout fifthLayout = activity.findViewById(R.id.day5_details);
-                    ((ViewGroup)fifthLayout.getParent()).removeView(fifthLayout);
-                    //fifthLayout.setVisibility(View.INVISIBLE);
+                    ((ViewGroup) fifthLayout.getParent()).removeView(fifthLayout);
                 }
 
 
-//                System.out.println("--------------------> " + arrayList.size());
-//                for (int i=0; i<arrayList.size(); i++){
-//                    System.out.println("--------------------> " + arrayList.get(i).size());
-//                    for(int j=0; j<arrayList.get(i).size(); j++){
-//                        arrayList.get(i).get(j).printValues();
-//                    }
-//                }
-
-                System.out.println("------------------------Day"+"0"+"------------------------");
-                for(int i=0; i<8; i++){
+                System.out.println("------------------------Day" + "0" + "------------------------");
+                for (int i = 0; i < 8; i++) {
                     CityDetailModel cityDetailModel = cityDetailList.get(i);
 
                     cityDetailModel.printValues();
-                    TextView textView = (TextView) activity.findViewById(getDay1ResourceIds(i+1).get("time"));
+                    TextView textView = (TextView) activity.findViewById(getDay1ResourceIds(i + 1).get("time"));
                     textView.setText(new SimpleDateFormat("h:mm a").format(cityDetailModel.getDateInProperFormat()) + "  ");
 
-                    textView = (TextView) activity.findViewById(getDay1ResourceIds(i+1).get("weather"));
+                    textView = (TextView) activity.findViewById(getDay1ResourceIds(i + 1).get("weather"));
                     textView.setText(cityDetailModel.getWeatherStatus().toString());
 
-                    textView = (TextView) activity.findViewById(getDay1ResourceIds(i+1).get("temp"));
+                    textView = (TextView) activity.findViewById(getDay1ResourceIds(i + 1).get("temp"));
                     textView.setText(cityDetailModel.getTemp() + " " + SettingsPreference.getSelectedUnitSuffix());
                 }
 
-                for (int i=1; i<arrayList.size(); i++){
+                for (int i = 1; i < arrayList.size(); i++) {
                     ArrayList<CityDetailModel> cityDetailModelList = arrayList.get(i);
-                    System.out.println("------------------------Day"+i+"------------------------");
+                    System.out.println("------------------------Day" + i + "------------------------");
 
                     Date tempDate = cityDetailModelList.get(0).getDateInProperFormat();
                     tempDate = new Date(tempDate.getYear(), tempDate.getMonth(), tempDate.getDate(), 12, 00);
                     ArrayList<Date> listOfDates = new ArrayList<Date>();
-                    for(int k=0; k<cityDetailModelList.size(); k++){
+                    for (int k = 0; k < cityDetailModelList.size(); k++) {
                         listOfDates.add(cityDetailModelList.get(k).getDateInProperFormat());
                     }
                     Date nearestToNoonTime = nearestNoonTime(listOfDates, tempDate);
                     listOfDates.clear();
 
-                    for (int j=0; j<cityDetailModelList.size(); j++){
+                    for (int j = 0; j < cityDetailModelList.size(); j++) {
                         CityDetailModel cityDetailModel = cityDetailModelList.get(j);
                         TextView textView = null;
-                        switch(i){
+                        switch (i) {
                             case 1:
-                                System.out.println("nearestToNoonTime: "+nearestToNoonTime + "cityDetailModel.getDateInProperFormat(): " + cityDetailModel.getDateInProperFormat());
-                                if(nearestToNoonTime.compareTo(cityDetailModel.getDateInProperFormat()) == 0) {
+                                System.out.println("nearestToNoonTime: " + nearestToNoonTime + "cityDetailModel.getDateInProperFormat(): " + cityDetailModel.getDateInProperFormat());
+                                if (nearestToNoonTime.compareTo(cityDetailModel.getDateInProperFormat()) == 0) {
                                     cityDetailModel.printValues();
                                     textView = (TextView) activity.findViewById(R.id.day2_textView);
                                     Date date = cityDetailModel.getDateInProperFormat();
@@ -184,7 +176,7 @@ public class GetForcastWeather {
 
                                     //Setting weather icon
                                     ImageView imageView = (ImageView) activity.findViewById(R.id.day2_details_weather_icon);
-                                    imageView.setImageDrawable(activity.getDrawable( getDrawableResourceId("icon_" + cityDetailModel.getWeatherIcon()) ));
+                                    imageView.setImageDrawable(context.getDrawable(getDrawableResourceId("icon_" + cityDetailModel.getWeatherIcon())));
 
                                     textView = (TextView) activity.findViewById(R.id.day2_details_row1_weather_status);
                                     textView.setText(cityDetailModel.getWeatherStatus().toString());
@@ -200,8 +192,8 @@ public class GetForcastWeather {
                                 }
                                 break;
                             case 2:
-                                System.out.println("nearestToNoonTime: "+nearestToNoonTime + "cityDetailModel.getDateInProperFormat(): " + cityDetailModel.getDateInProperFormat());
-                                if(nearestToNoonTime.compareTo(cityDetailModel.getDateInProperFormat()) == 0) {
+                                System.out.println("nearestToNoonTime: " + nearestToNoonTime + "cityDetailModel.getDateInProperFormat(): " + cityDetailModel.getDateInProperFormat());
+                                if (nearestToNoonTime.compareTo(cityDetailModel.getDateInProperFormat()) == 0) {
 
                                     cityDetailModel.printValues();
                                     textView = (TextView) activity.findViewById(R.id.day3_textView);
@@ -210,7 +202,7 @@ public class GetForcastWeather {
 
                                     //Setting weather icon
                                     ImageView imageView = (ImageView) activity.findViewById(R.id.day3_details_weather_icon);
-                                    imageView.setImageDrawable(activity.getDrawable( getDrawableResourceId("icon_" + cityDetailModel.getWeatherIcon()) ));
+                                    imageView.setImageDrawable(context.getDrawable(getDrawableResourceId("icon_" + cityDetailModel.getWeatherIcon())));
 
                                     textView = (TextView) activity.findViewById(R.id.day3_details_row1_weather_status);
                                     textView.setText(cityDetailModel.getWeatherStatus().toString());
@@ -226,8 +218,8 @@ public class GetForcastWeather {
                                 }
                                 break;
                             case 3:
-                                System.out.println("nearestToNoonTime: "+nearestToNoonTime + "cityDetailModel.getDateInProperFormat(): " + cityDetailModel.getDateInProperFormat());
-                                if(nearestToNoonTime.compareTo(cityDetailModel.getDateInProperFormat()) == 0) {
+                                System.out.println("nearestToNoonTime: " + nearestToNoonTime + "cityDetailModel.getDateInProperFormat(): " + cityDetailModel.getDateInProperFormat());
+                                if (nearestToNoonTime.compareTo(cityDetailModel.getDateInProperFormat()) == 0) {
 
                                     cityDetailModel.printValues();
                                     textView = (TextView) activity.findViewById(R.id.day4_textView);
@@ -236,7 +228,7 @@ public class GetForcastWeather {
 
                                     //Setting weather icon
                                     ImageView imageView = (ImageView) activity.findViewById(R.id.day4_details_weather_icon);
-                                    imageView.setImageDrawable(activity.getDrawable( getDrawableResourceId("icon_" + cityDetailModel.getWeatherIcon()) ));
+                                    imageView.setImageDrawable(context.getDrawable(getDrawableResourceId("icon_" + cityDetailModel.getWeatherIcon())));
 
                                     textView = (TextView) activity.findViewById(R.id.day4_details_row1_weather_status);
                                     textView.setText(cityDetailModel.getWeatherStatus().toString());
@@ -252,8 +244,8 @@ public class GetForcastWeather {
                                 }
                                 break;
                             case 4:
-                                System.out.println("nearestToNoonTime: "+nearestToNoonTime + "cityDetailModel.getDateInProperFormat(): " + cityDetailModel.getDateInProperFormat());
-                                if(nearestToNoonTime.compareTo(cityDetailModel.getDateInProperFormat()) <= 0) {
+                                System.out.println("nearestToNoonTime: " + nearestToNoonTime + "cityDetailModel.getDateInProperFormat(): " + cityDetailModel.getDateInProperFormat());
+                                if (nearestToNoonTime.compareTo(cityDetailModel.getDateInProperFormat()) <= 0) {
 
                                     cityDetailModel.printValues();
                                     textView = (TextView) activity.findViewById(R.id.day5_textView);
@@ -262,7 +254,7 @@ public class GetForcastWeather {
 
                                     //Setting weather icon
                                     ImageView imageView = (ImageView) activity.findViewById(R.id.day5_details_weather_icon);
-                                    imageView.setImageDrawable(activity.getDrawable( getDrawableResourceId("icon_" + cityDetailModel.getWeatherIcon()) ));
+                                    imageView.setImageDrawable(context.getDrawable(getDrawableResourceId("icon_" + cityDetailModel.getWeatherIcon())));
 
                                     textView = (TextView) activity.findViewById(R.id.day5_details_row1_weather_status);
                                     textView.setText(cityDetailModel.getWeatherStatus().toString());
@@ -284,7 +276,7 @@ public class GetForcastWeather {
         }
     }
 
-    public Date nearestNoonTime(List<Date> dates, Date date){
+    public Date nearestNoonTime(List<Date> dates, Date date) {
         final long now = date.getTime();
 
         Date closest = Collections.min(dates, new Comparator<Date>() {
@@ -297,62 +289,62 @@ public class GetForcastWeather {
         return closest;
     }
 
-    public HashMap<String, Integer> getDay1ResourceIds(int dayNumber){
+    public HashMap<String, Integer> getDay1ResourceIds(int dayNumber) {
         HashMap<String, Integer> hashMap = new HashMap<String, Integer>();
 
-        switch (dayNumber){
+        switch (dayNumber) {
             case 1:
-                hashMap.put("time",R.id.day1_time1);
-                hashMap.put("weather",R.id.day1_weather1);
-                hashMap.put("temp",R.id.day1_temp1);
+                hashMap.put("time", R.id.day1_time1);
+                hashMap.put("weather", R.id.day1_weather1);
+                hashMap.put("temp", R.id.day1_temp1);
                 return hashMap;
             case 2:
-                hashMap.put("time",R.id.day1_time2);
-                hashMap.put("weather",R.id.day1_weather2);
-                hashMap.put("temp",R.id.day1_temp2);
+                hashMap.put("time", R.id.day1_time2);
+                hashMap.put("weather", R.id.day1_weather2);
+                hashMap.put("temp", R.id.day1_temp2);
                 return hashMap;
             case 3:
-                hashMap.put("time",R.id.day1_time3);
-                hashMap.put("weather",R.id.day1_weather3);
-                hashMap.put("temp",R.id.day1_temp3);
+                hashMap.put("time", R.id.day1_time3);
+                hashMap.put("weather", R.id.day1_weather3);
+                hashMap.put("temp", R.id.day1_temp3);
                 return hashMap;
             case 4:
-                hashMap.put("time",R.id.day1_time4);
-                hashMap.put("weather",R.id.day1_weather4);
-                hashMap.put("temp",R.id.day1_temp4);
+                hashMap.put("time", R.id.day1_time4);
+                hashMap.put("weather", R.id.day1_weather4);
+                hashMap.put("temp", R.id.day1_temp4);
                 return hashMap;
             case 5:
-                hashMap.put("time",R.id.day1_time5);
-                hashMap.put("weather",R.id.day1_weather5);
-                hashMap.put("temp",R.id.day1_temp5);
+                hashMap.put("time", R.id.day1_time5);
+                hashMap.put("weather", R.id.day1_weather5);
+                hashMap.put("temp", R.id.day1_temp5);
                 return hashMap;
             case 6:
-                hashMap.put("time",R.id.day1_time6);
-                hashMap.put("weather",R.id.day1_weather6);
-                hashMap.put("temp",R.id.day1_temp6);
+                hashMap.put("time", R.id.day1_time6);
+                hashMap.put("weather", R.id.day1_weather6);
+                hashMap.put("temp", R.id.day1_temp6);
                 return hashMap;
             case 7:
-                hashMap.put("time",R.id.day1_time7);
-                hashMap.put("weather",R.id.day1_weather7);
-                hashMap.put("temp",R.id.day1_temp7);
+                hashMap.put("time", R.id.day1_time7);
+                hashMap.put("weather", R.id.day1_weather7);
+                hashMap.put("temp", R.id.day1_temp7);
                 return hashMap;
             case 8:
-                hashMap.put("time",R.id.day1_time8);
-                hashMap.put("weather",R.id.day1_weather8);
-                hashMap.put("temp",R.id.day1_temp8);
+                hashMap.put("time", R.id.day1_time8);
+                hashMap.put("weather", R.id.day1_weather8);
+                hashMap.put("temp", R.id.day1_temp8);
                 return hashMap;
             default:
-                hashMap.put("time",R.id.day1_time1);
-                hashMap.put("weather",R.id.day1_weather1);
-                hashMap.put("temp",R.id.day1_temp1);
+                hashMap.put("time", R.id.day1_time1);
+                hashMap.put("weather", R.id.day1_weather1);
+                hashMap.put("temp", R.id.day1_temp1);
                 return hashMap;
         }
     }
 
-    public int getDrawableResourceId(String resourceName){
+    public int getDrawableResourceId(String resourceName) {
         int returnValue = 0;
 
-        switch (resourceName){
+        switch (resourceName) {
             case Constants.ICON_01D:
                 return R.drawable.icon_01d;
             case Constants.ICON_01N:

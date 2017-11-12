@@ -27,6 +27,7 @@ import com.apoorv.android.weatherapp.dummy.DummyContent;
 import com.apoorv.android.weatherapp.helper.Constants;
 import com.apoorv.android.weatherapp.helper.ExceptionMessageHandler;
 import com.apoorv.android.weatherapp.helper.GetCurrentWeather;
+import com.apoorv.android.weatherapp.helper.LogHelper;
 import com.apoorv.android.weatherapp.helper.RequestClass;
 import com.apoorv.android.weatherapp.helper.SettingsPreference;
 import com.apoorv.android.weatherapp.mSwiper.SwipeHelper;
@@ -44,21 +45,7 @@ import java.util.List;
 import java.util.Set;
 
 import butterknife.ButterKnife;
-
-/**
- * An activity representing a list of Cities. This activity
- * has different presentations for handset and tablet-size devices. On
- * handsets, the activity presents a list of items, which when touched,
- * lead to a {@link CityDetailActivity} representing
- * item details. On tablets, the activity presents the list of items and
- * item details side-by-side using two vertical panes.
- */
  public  class  CityListActivity extends AppCompatActivity {
-
-    /**
-     * Whether or not the activity is in two-pane mode, i.e. running on a tablet
-     * device.
-     */
     private boolean mTwoPane;
     private Place selectedPlace;
     public SimpleItemRecyclerViewAdapter cityListAdapter;
@@ -83,10 +70,6 @@ import butterknife.ButterKnife;
         ExceptionMessageHandler.context = getApplicationContext();
 
         if (findViewById(R.id.city_detail_container) != null) {
-            // The detail container view will be present only in the
-            // large-screen layouts (res/values-w900dp).
-            // If this view is present, then the
-            // activity should be in two-pane mode.
             mTwoPane = true;
         }
         //Bind the butterknife library
@@ -116,31 +99,28 @@ import butterknife.ButterKnife;
                 .build();
         autocompleteFragment.setFilter(typeFilter);
 
+        
+        
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
                 // TODO: Get info about the selected place.
-                Log.i("Apoorv", "Place: " + place.getName());
-                Log.i("Place","Place Name: "+place.getLatLng().latitude);
+                LogHelper.logMessage("Apoorv", "Place: " + place.getName());
+                LogHelper.logMessage("Place","Place Name: "+place.getLatLng().latitude);
                 selectedPlace = place;
+                LogHelper.logMessage("Apoorv","PlaceID:"+place.getId());
 
             }
 
             @Override
             public void onError(Status status) {
                 // TODO: Handle the error.
-                Log.i("Apoorv", "An error occurred: " + status);
+                LogHelper.logMessage("Apoorv", "An error occurred: " + status);
                 ExceptionMessageHandler.handleError(getApplicationContext(), status.getStatusMessage(), new Exception(), null);
             }
         });
 
     }
-
-//    @OnClick(R.id.default_list_button)
-//    void buttonClicker() {
-//        // Toast.makeText(this, "AAAAA", Toast.LENGTH_SHORT).show();
-//        DefaultList.receiveContext(this);
-//    }
 
     //Added a menu for Adding Cities with + icon
     @Override
@@ -186,13 +166,6 @@ import butterknife.ButterKnife;
         recyclerView.setAdapter(this.cityListAdapter);
     }
 
-
-
-    // Adapter Class
-    //
-    //
-
-
     public class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
@@ -215,16 +188,14 @@ import butterknife.ButterKnife;
         }
 
         @Override
-        public void onBindViewHolder(final ViewHolder holder, int position) {
+        public void onBindViewHolder(final ViewHolder holder, final int position) {
             holder.mItem = mValues.get(position);
-           // holder.mIdView.setText(mValues.get(position).id);
             holder.mNameView.setText(mValues.get(position).getCityName());
             holder.mContentView.setText(mValues.get(position).getCityDescription());
             holder.mCurrentTime.setText(mValues.get(position).getTimeString());
             if(holder.mItem.isCurrent) holder.mView.setBackgroundColor(Color.parseColor("#F0F4C3"));
             else
                 holder.mView.setBackgroundColor(Color.parseColor("#1F000000"));
-           // holder.mCurrentPreferenceUnit.setText();
 
             //Create new Hashmap for API parameters
             HashMap<String, Object> weatherAPIMap = new HashMap<String, Object>();
@@ -235,11 +206,10 @@ import butterknife.ButterKnife;
             //Start request Queue
             RequestClass.startRequestQueue();
             try {
-                new GetCurrentWeather().processWeatherApiCurrent(holder.mItem.latitude,holder.mItem.longitude,Constants.ACTION_UPDATE_CITY_LIST_ITEM_FOR_TEMPERATURE,getParent(),weatherAPIMap);
+                new GetCurrentWeather().processWeatherApiCurrent(getBaseContext(), holder.mItem.latitude,holder.mItem.longitude,Constants.ACTION_UPDATE_CITY_LIST_ITEM_FOR_TEMPERATURE,null,weatherAPIMap);
             } catch (JSONException e) {
                 ExceptionMessageHandler.handleError(getApplicationContext(), e.getMessage(), e, null);
             }
-            //holder.mContentView.setText(mValues.get(position).toString());
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -256,6 +226,7 @@ import butterknife.ButterKnife;
                         Context context = v.getContext();
                         Intent intent = new Intent(context, CityDetailActivity.class);
                         intent.putExtra(CityDetailFragment.ARG_ITEM_ID, holder.mItem.id);
+                        intent.putExtra("index", position);
 
                         context.startActivity(intent);
                     }
@@ -266,7 +237,7 @@ import butterknife.ButterKnife;
 
                 @Override
                 public boolean onLongClick(View view) {
-                    Log.i("Apoorv", "Item long clicked"+holder.mItem.getUniqueDelimitedString());
+                    LogHelper.logMessage("Apoorv", "Item long clicked"+holder.mItem.getUniqueDelimitedString());
                     DefaultList.updateCurrentCity(holder.getAdapterPosition(),holder.mItem,getApplicationContext());
                     Toast.makeText(getApplicationContext(),"Updated Current City",Toast.LENGTH_SHORT).show();
                     cityListAdapter.notifyDataSetChanged();
@@ -287,8 +258,7 @@ import butterknife.ButterKnife;
 
         public void deleteCityWithSwipe (int position) {
             DefaultList.deleteCity(position,this.context);
-            mValues.remove(position);
-           Log.i("Apoorv","Size of arrayList after mValue removal"+DefaultList.LISTPLACES.size());
+           LogHelper.logMessage("Apoorv","Size of arrayList after mValue removal"+DefaultList.LISTPLACES.size());
 
             this.notifyItemRemoved(position);
         }

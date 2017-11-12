@@ -9,6 +9,7 @@ import com.apoorv.android.weatherapp.CityListActivity;
 import com.apoorv.android.weatherapp.helper.Constants;
 import com.apoorv.android.weatherapp.helper.GetCurrentWeather;
 import com.apoorv.android.weatherapp.helper.GetTimeZone;
+import com.apoorv.android.weatherapp.helper.LogHelper;
 import com.apoorv.android.weatherapp.helper.RequestClass;
 import com.apoorv.android.weatherapp.helper.SettingsPreference;
 import com.google.android.gms.location.places.Place;
@@ -42,27 +43,28 @@ public class DefaultList {
     public static void writetoSharedInitial(Context c) {
         SharedPreferences sharedPref = c.getSharedPreferences("weathercities",Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
-        Log.i("Apoorv","Writing to database size"+citiesset.size());
+        LogHelper.logMessage("Apoorv","Writing to database size"+citiesset.size());
        editor.putStringSet("citieslist",citiesset);
         editor.apply();
     }
 
-    public static CityItem getCityDetails (Context c, String id) {
+    public static CityItem getCityDetails (Context c, int index) {
         CityItem cityItem = null;
 
-        SharedPreferences sharedPref = c.getSharedPreferences("weathercities",Context.MODE_PRIVATE);
-        Set<String> returnedset = sharedPref.getStringSet("citieslist", Collections.EMPTY_SET);
-
-        for (String s: returnedset) {
-            //for each city string in return set, construct a cityItem PoJo and add to the static list.
-            String [] citydetails = s.split("@");
-            CityItem city1 = new CityItem(citydetails[0],citydetails[1],citydetails[2],citydetails[3],citydetails[4],citydetails[5],citydetails[6],citydetails[7]);
-            if(id.equalsIgnoreCase(city1.id)){
-                cityItem = city1;
-            }
-        }
-
-        return cityItem;
+//        SharedPreferences sharedPref = c.getSharedPreferences("weathercities",Context.MODE_PRIVATE);
+//        Set<String> returnedset = sharedPref.getStringSet("citieslist", Collections.EMPTY_SET);
+//
+//        for (String s: returnedset) {
+//            //for each city string in return set, construct a cityItem PoJo and add to the static list.
+//            String [] citydetails = s.split("@");
+//            CityItem city1 = new CityItem(citydetails[0],citydetails[1],citydetails[2],citydetails[3],citydetails[4],citydetails[5],citydetails[6],citydetails[7]);
+//            if(id.equalsIgnoreCase(city1.id)){
+//                cityItem = city1;
+//            }
+//        }
+//
+//        return cityItem;
+        return DefaultList.LISTPLACES.get(index);
     }
 
     public static void readFromSharedInitial (Context c) {
@@ -72,22 +74,13 @@ public class DefaultList {
         for (String s: returnedset) {
             //for each city string in return set, construct a cityItem PoJo and add to the static list.
             String [] citydetails = s.split("@");
-            Log.i("Apoorv", "Got a city from database, adding it to the list");
+            LogHelper.logMessage("Apoorv", "Got a city from database, adding it to the list");
             System.out.println(citydetails[7]);
             CityItem city1 = new CityItem(citydetails[0],citydetails[1],citydetails[2],citydetails[3],citydetails[4],citydetails[5],citydetails[6],citydetails[7]);
             addItem(city1);
             citiesset.add(city1.getDelimitedString());
         }
 
-//        //check if we have cities. If not, add the default sity to sharedContext and to the List.
-//        if(LISTPLACES.size() == 0) {
-//            Log.i("Apoorv", "No city database, adding default to the list");
-//            citiesset.add(defaultCities[0]);
-//            DefaultList.writetoSharedInitial(c);
-//            String[] citydetails = defaultCities[0].split("@");
-//            CityItem city1 = new CityItem(citydetails[0],citydetails[1],citydetails[2],citydetails[3],citydetails[4],citydetails[5],citydetails[6],citydetails[7]);
-//            addItem(city1);
-//        }
 
     }
 
@@ -96,7 +89,7 @@ public class DefaultList {
 
             for(CityItem city : LISTPLACES)
             {
-                Log.i("Apoorv list",city.getDelimitedString());
+                LogHelper.logMessage("Apoorv list",city.getDelimitedString());
             }
 
             HashMap<String, Object> hashMap = new HashMap<String, Object>();
@@ -123,10 +116,11 @@ public class DefaultList {
     public static void deleteCity(int position, Context context) {
 
         CityItem cityToBeRemoved = LISTPLACES.get(position);
-        Log.i("Apoorv", "Will delete from Database"+cityToBeRemoved.getDelimitedString());
-        Log.i("Apoorv","Set size before delete"+citiesset.size());
+        LogHelper.logMessage("Apoorv", "Will delete from Database"+cityToBeRemoved.getDelimitedString());
+        LogHelper.logMessage("Apoorv","Set size before delete"+citiesset.size());
         citiesset.remove(cityToBeRemoved.getDelimitedString());
-        Log.i("Apoorv","Set size after delete"+citiesset.size());
+        LISTPLACES.remove(position);
+        LogHelper.logMessage("Apoorv","Set size after delete"+citiesset.size());
         writetoSharedInitial(context);
     }
 
@@ -143,12 +137,12 @@ public class DefaultList {
 
         if(existingCurrentCity!=null) {
             citiesset.remove(existingCurrentCity.getDelimitedString());
-            Log.i("Apoorv",existingCurrentCity.name+" is no longer default");
+            LogHelper.logMessage("Apoorv",existingCurrentCity.name+" is no longer default");
             existingCurrentCity.isCurrent = false;
             citiesset.add(existingCurrentCity.getDelimitedString());
         }
         CityItem cityToBeUpdated = LISTPLACES.get(position);
-        Log.i("Apoorv","Marking city for default"+cityToBeUpdated.getDelimitedString());
+        LogHelper.logMessage("Apoorv","Marking city for default"+cityToBeUpdated.getDelimitedString());
         citiesset.remove(cityToBeUpdated.getDelimitedString());
         cityToBeUpdated.isCurrent = true;
         citiesset.add(cityToBeUpdated.getDelimitedString());
@@ -209,29 +203,13 @@ public class DefaultList {
            return getListViewString(name,timeZone);
         }
 
-//        public String getCurrentTemperature(CityListActivity.SimpleItemRecyclerViewAdapter givenAdapter, TextView mTemperatureView, Activity a) {
-//
-//            //Create new Hashmap for API parameters
-//            HashMap<String, Object> weatherAPIMap = new HashMap<String, Object>();
-//            weatherAPIMap.put("adapter",givenAdapter);
-//            weatherAPIMap.put("temperatureView",mTemperatureView);
-//
-//
-//            //Start request Queue
-//            RequestClass.startRequestQueue();
-//            try {
-//                new GetCurrentWeather().processWeatherApiCurrent(latitude,longitude,Constants.ACTION_UPDATE_CITY_LIST_ITEM_FOR_TEMPERATURE, a,weatherAPIMap);
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//        }
 
 
         public String getListViewString(String name, String timeZoneid) {
             SimpleDateFormat df = new SimpleDateFormat();
             df.setTimeZone(TimeZone.getTimeZone(timeZoneid));
             Date date = new Date();
-            Log.i("Apoorv","Time at " +name+" is: " + new Date(df.format(date)));
+            LogHelper.logMessage("Apoorv","Time at " +name+" is: " + new Date(df.format(date)));
             df.applyPattern("h:mm a");
             return df.format(date);
         }
