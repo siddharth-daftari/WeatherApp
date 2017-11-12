@@ -38,7 +38,7 @@ public class GetForcastWeather {
     public void processWeatherApiForecast(final Context context, String latitude, String longitude, final String action, final View view, final HashMap<String, Object> extraParams) throws JSONException {
 
         String urlString = "https://api.openweathermap.org/data/2.5/forecast?lat="
-                + latitude + "&lon=" + longitude + "&APPID=" + Secrets.SECRET_FOR_WEATHER_API + "&units=" + SettingsPreference.getSelectedUnitParam();
+                + latitude + "&lon=" + longitude + "&APPID=" + Secrets.getSecretForWeatherApi() + "&units=" + SettingsPreference.getSelectedUnitParam();
 
 
         JsonObjectRequest jsObjRequest = new JsonObjectRequest

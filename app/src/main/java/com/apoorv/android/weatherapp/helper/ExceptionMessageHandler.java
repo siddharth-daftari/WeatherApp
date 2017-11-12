@@ -16,9 +16,13 @@ public class ExceptionMessageHandler {
     public static Context context = null;
 
     public static void handleError(Context c, String message, Exception e, HashMap<String, Object> extraParams){
+        if(message == null || message.equals(""))
+        {
+            message = "Oops! Something Went Wrong";
+        }
         System.out.println("-----> EXCEPTION: " + message + "  -----> context: " + context);
         e.printStackTrace();
-        Toast toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
+        Toast toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
         toast.show();
 
     }
