@@ -47,22 +47,23 @@ public class DefaultList {
         editor.apply();
     }
 
-    public static CityItem getCityDetails (Context c, String id) {
+    public static CityItem getCityDetails (Context c, int index) {
         CityItem cityItem = null;
 
-        SharedPreferences sharedPref = c.getSharedPreferences("weathercities",Context.MODE_PRIVATE);
-        Set<String> returnedset = sharedPref.getStringSet("citieslist", Collections.EMPTY_SET);
-
-        for (String s: returnedset) {
-            //for each city string in return set, construct a cityItem PoJo and add to the static list.
-            String [] citydetails = s.split("@");
-            CityItem city1 = new CityItem(citydetails[0],citydetails[1],citydetails[2],citydetails[3],citydetails[4],citydetails[5],citydetails[6],citydetails[7]);
-            if(id.equalsIgnoreCase(city1.id)){
-                cityItem = city1;
-            }
-        }
-
-        return cityItem;
+//        SharedPreferences sharedPref = c.getSharedPreferences("weathercities",Context.MODE_PRIVATE);
+//        Set<String> returnedset = sharedPref.getStringSet("citieslist", Collections.EMPTY_SET);
+//
+//        for (String s: returnedset) {
+//            //for each city string in return set, construct a cityItem PoJo and add to the static list.
+//            String [] citydetails = s.split("@");
+//            CityItem city1 = new CityItem(citydetails[0],citydetails[1],citydetails[2],citydetails[3],citydetails[4],citydetails[5],citydetails[6],citydetails[7]);
+//            if(id.equalsIgnoreCase(city1.id)){
+//                cityItem = city1;
+//            }
+//        }
+//
+//        return cityItem;
+        return DefaultList.LISTPLACES.get(index);
     }
 
     public static void readFromSharedInitial (Context c) {
@@ -126,6 +127,7 @@ public class DefaultList {
         Log.i("Apoorv", "Will delete from Database"+cityToBeRemoved.getDelimitedString());
         Log.i("Apoorv","Set size before delete"+citiesset.size());
         citiesset.remove(cityToBeRemoved.getDelimitedString());
+        LISTPLACES.remove(position);
         Log.i("Apoorv","Set size after delete"+citiesset.size());
         writetoSharedInitial(context);
     }

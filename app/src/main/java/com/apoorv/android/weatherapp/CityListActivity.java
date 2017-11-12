@@ -123,6 +123,7 @@ import butterknife.ButterKnife;
                 Log.i("Apoorv", "Place: " + place.getName());
                 Log.i("Place","Place Name: "+place.getLatLng().latitude);
                 selectedPlace = place;
+                Log.i("Apoorv","PlaceID:"+place.getId());
 
             }
 
@@ -215,7 +216,7 @@ import butterknife.ButterKnife;
         }
 
         @Override
-        public void onBindViewHolder(final ViewHolder holder, int position) {
+        public void onBindViewHolder(final ViewHolder holder, final int position) {
             holder.mItem = mValues.get(position);
            // holder.mIdView.setText(mValues.get(position).id);
             holder.mNameView.setText(mValues.get(position).getCityName());
@@ -235,7 +236,7 @@ import butterknife.ButterKnife;
             //Start request Queue
             RequestClass.startRequestQueue();
             try {
-                new GetCurrentWeather().processWeatherApiCurrent(holder.mItem.latitude,holder.mItem.longitude,Constants.ACTION_UPDATE_CITY_LIST_ITEM_FOR_TEMPERATURE,getParent(),weatherAPIMap);
+                new GetCurrentWeather().processWeatherApiCurrent(getBaseContext(), holder.mItem.latitude,holder.mItem.longitude,Constants.ACTION_UPDATE_CITY_LIST_ITEM_FOR_TEMPERATURE,null,weatherAPIMap);
             } catch (JSONException e) {
                 ExceptionMessageHandler.handleError(getApplicationContext(), e.getMessage(), e, null);
             }
@@ -256,6 +257,7 @@ import butterknife.ButterKnife;
                         Context context = v.getContext();
                         Intent intent = new Intent(context, CityDetailActivity.class);
                         intent.putExtra(CityDetailFragment.ARG_ITEM_ID, holder.mItem.id);
+                        intent.putExtra("index", position);
 
                         context.startActivity(intent);
                     }
@@ -287,7 +289,6 @@ import butterknife.ButterKnife;
 
         public void deleteCityWithSwipe (int position) {
             DefaultList.deleteCity(position,this.context);
-            mValues.remove(position);
            Log.i("Apoorv","Size of arrayList after mValue removal"+DefaultList.LISTPLACES.size());
 
             this.notifyItemRemoved(position);

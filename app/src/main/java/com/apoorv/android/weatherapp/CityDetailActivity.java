@@ -35,11 +35,20 @@ public class CityDetailActivity extends AppCompatActivity {
         pageAdapter = new CityDetailPageAdapter(getSupportFragmentManager(),this);
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(pageAdapter);
-        // Show the Up button in the action bar.
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+
+
+        int index = getIntent().getIntExtra("index", 0);
+        mViewPager.setCurrentItem(index);
+//
+//        // Show the Up button in the action bar.
+//        ActionBar actionBar = getSupportActionBar();
+//        System.out.println("Apoorv actionbar"+actionBar);
+//        if (actionBar != null) {
+//            actionBar.setDisplayHomeAsUpEnabled(true);
+//        }
+
+
+
 
         // savedInstanceState is non-null when there is fragment state
         // saved from previous configurations of this activity

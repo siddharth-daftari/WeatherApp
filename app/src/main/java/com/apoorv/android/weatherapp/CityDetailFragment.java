@@ -1,10 +1,14 @@
 package com.apoorv.android.weatherapp;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
+import android.support.design.widget.CustomFab;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toolbar;
 
 import com.apoorv.android.weatherapp.dummy.DefaultList;
 import com.apoorv.android.weatherapp.dummy.DummyContent;
@@ -67,8 +72,35 @@ public class CityDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         Log.i("Apoorv", "Came to detail fragment with key"+String.valueOf(getArguments().get(ARG_ITEM_ID)));
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+//
+
+        View rootView = inflater.inflate(R.layout.city_detail, container, false);
+
+        // Show the Up button in the action bar.
+        android.support.v7.widget.Toolbar toolbar = rootView.findViewById(R.id.detail_toolbar);
+        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+
+        ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
+        System.out.println("Apoorv actionbar"+actionBar);
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               Log.i("Apoorv","Back button pressed");
+                getActivity().navigateUpTo(new Intent(getActivity(), CityListActivity.class));
+            }
+        });
+
 
 
         try {
@@ -76,23 +108,26 @@ public class CityDetailFragment extends Fragment {
 
                 HashMap<String, String> responseHashMap = null;
 
-                Activity activity = this.getActivity();
-                RelativeLayout relativeLayout = (RelativeLayout) activity.findViewById(R.id.city_detail_relative_layout);
-                DefaultList.CityItem cityItem = DefaultList.getCityDetails(this.getContext(), String.valueOf(getArguments().get(ARG_ITEM_ID)));
+                RelativeLayout relativeLayout = rootView.findViewById(R.id.city_detail_relative_layout);
+//                DefaultList.CityItem cityItem = DefaultList.getCityDetails(this.getContext(), String.valueOf(getArguments().get(ARG_ITEM_ID)));
+                int index = getArguments().getInt(ARG_ITEM_ID);
+                System.out.println("swami: "+index);
+                DefaultList.CityItem cityItem = DefaultList.getCityDetails(this.getContext(), index);
+                System.out.println(cityItem.getCityName());
 
                 if(cityItem != null) {
                     //Setting city name
-                    TextView cityNameTextView = (TextView) relativeLayout.findViewById(R.id.city_detail_name_value);
+                    TextView cityNameTextView = relativeLayout.findViewById(R.id.city_detail_name_value);
                     cityNameTextView.setText(cityItem.name);
 
                     //Setting "You are here" icon
-                    FloatingActionButton floatingActionButton = (FloatingActionButton)activity.findViewById(R.id.fab);
+                    CustomFab floatingActionButton = rootView.findViewById(R.id.fab);
                     if(floatingActionButton != null && cityItem.isCurrent){
                         floatingActionButton.setVisibility(View.VISIBLE);
                     }
 
                     //Setting day date
-                    TextView cityDetailDate = (TextView) relativeLayout.findViewById(R.id.city_detail_date);
+                    TextView cityDetailDate = relativeLayout.findViewById(R.id.city_detail_date);
 
 
                     responseHashMap = GetTimeZone.getTimeDetailsWithoutApiCall(cityItem.timeZone);
@@ -107,30 +142,20 @@ public class CityDetailFragment extends Fragment {
 
                     //Setting Weather and temperature
                     RequestClass.startRequestQueue();
-                    new GetCurrentWeather().processWeatherApiCurrent(cityItem.latitude, cityItem.longitude, Constants.ACTION_UPDATE_CITY_DETAIL_UI, activity, null);
+                    new GetCurrentWeather().processWeatherApiCurrent(getContext(), cityItem.latitude, cityItem.longitude, Constants.ACTION_UPDATE_CITY_DETAIL_UI, rootView, null);
 
                     //Setting today's 3 hour weather and forecast for 4 days
                     RequestClass.startRequestQueue();
                     HashMap hm = new HashMap<String, Object>();
                     hm.put(Constants.TIMEZONE, cityItem.timeZone);
                     Log.i("Apoorv","Trying to get forcast for "+cityItem.name);
-                    new GetForcastWeather().processWeatherApiForecast(cityItem.latitude, cityItem.longitude, Constants.ACTION_UPDATE_CITY_DETAIL_UI_FOR_WEATHER, activity, hm);
+                    new GetForcastWeather().processWeatherApiForecast(getContext(), cityItem.latitude, cityItem.longitude, Constants.ACTION_UPDATE_CITY_DETAIL_UI_FOR_WEATHER, rootView, hm);
 
                 }
             }
         } catch (JSONException e) {
             ExceptionMessageHandler.handleError(getActivity(), e.getMessage(), e, null);
         }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.city_detail, container, false);
-
-        // Show the dummy content as text in a TextView.
-        //((TextView) rootView.findViewById(R.id.city_detail)).setText("hello");
-
 
         return rootView;
     }
