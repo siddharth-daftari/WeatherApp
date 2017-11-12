@@ -162,14 +162,18 @@ public class GetForcastWeather {
                     Date nearestToNoonTime = nearestNoonTime(listOfDates, tempDate);
                     listOfDates.clear();
 
+                    Double maxTemp = 0.0;
+                    Double minTemp = 9999.0;
+
                     for (int j = 0; j < cityDetailModelList.size(); j++) {
                         CityDetailModel cityDetailModel = cityDetailModelList.get(j);
                         TextView textView = null;
                         switch (i) {
                             case 1:
-                                System.out.println("nearestToNoonTime: " + nearestToNoonTime + "cityDetailModel.getDateInProperFormat(): " + cityDetailModel.getDateInProperFormat());
+                                cityDetailModel.printValues();
+
                                 if (nearestToNoonTime.compareTo(cityDetailModel.getDateInProperFormat()) == 0) {
-                                    cityDetailModel.printValues();
+                                    System.out.println("nearestToNoonTime: " + nearestToNoonTime + "cityDetailModel.getDateInProperFormat(): " + cityDetailModel.getDateInProperFormat());
                                     textView = (TextView) activity.findViewById(R.id.day2_textView);
                                     Date date = cityDetailModel.getDateInProperFormat();
                                     textView.setText(new SimpleDateFormat("EEEE").format(date));
@@ -183,19 +187,27 @@ public class GetForcastWeather {
 
                                     textView = (TextView) activity.findViewById(R.id.day2_details_row1_temp_value);
                                     textView.setText(cityDetailModel.getTemp() + " " + SettingsPreference.getSelectedUnitSuffix());
+                                }
 
+                                if( cityDetailModel.getTempHighInDouble() > maxTemp) {
+                                    maxTemp = cityDetailModel.getTempHighInDouble();
                                     textView = (TextView) activity.findViewById(R.id.day2_details_row2_max_temp_value);
                                     textView.setText(cityDetailModel.getTempHigh() + " " + SettingsPreference.getSelectedUnitSuffix());
+                                }
 
+                                if( cityDetailModel.getTempLowInDouble() < minTemp) {
+                                    minTemp = cityDetailModel.getTempLowInDouble();
                                     textView = (TextView) activity.findViewById(R.id.day2_details_row2_min_temp_value);
                                     textView.setText(cityDetailModel.getTempLow() + " " + SettingsPreference.getSelectedUnitSuffix());
                                 }
+
                                 break;
                             case 2:
-                                System.out.println("nearestToNoonTime: " + nearestToNoonTime + "cityDetailModel.getDateInProperFormat(): " + cityDetailModel.getDateInProperFormat());
+                                cityDetailModel.printValues();
+
                                 if (nearestToNoonTime.compareTo(cityDetailModel.getDateInProperFormat()) == 0) {
 
-                                    cityDetailModel.printValues();
+                                    System.out.println("nearestToNoonTime: " + nearestToNoonTime + "cityDetailModel.getDateInProperFormat(): " + cityDetailModel.getDateInProperFormat());
                                     textView = (TextView) activity.findViewById(R.id.day3_textView);
                                     Date date = cityDetailModel.getDateInProperFormat();
                                     textView.setText(new SimpleDateFormat("EEEE").format(date));
@@ -210,18 +222,25 @@ public class GetForcastWeather {
                                     textView = (TextView) activity.findViewById(R.id.day3_details_row1_temp_value);
                                     textView.setText(cityDetailModel.getTemp() + " " + SettingsPreference.getSelectedUnitSuffix());
 
+                                }
+
+                                if( cityDetailModel.getTempHighInDouble() > maxTemp) {
+                                    maxTemp = cityDetailModel.getTempHighInDouble();
                                     textView = (TextView) activity.findViewById(R.id.day3_details_row2_max_temp_value);
                                     textView.setText(cityDetailModel.getTempHigh() + " " + SettingsPreference.getSelectedUnitSuffix());
+                                }
 
+                                if( cityDetailModel.getTempLowInDouble() < minTemp) {
+                                    minTemp = cityDetailModel.getTempLowInDouble();
                                     textView = (TextView) activity.findViewById(R.id.day3_details_row2_min_temp_value);
                                     textView.setText(cityDetailModel.getTempLow() + " " + SettingsPreference.getSelectedUnitSuffix());
                                 }
                                 break;
                             case 3:
-                                System.out.println("nearestToNoonTime: " + nearestToNoonTime + "cityDetailModel.getDateInProperFormat(): " + cityDetailModel.getDateInProperFormat());
+                                cityDetailModel.printValues();
                                 if (nearestToNoonTime.compareTo(cityDetailModel.getDateInProperFormat()) == 0) {
 
-                                    cityDetailModel.printValues();
+                                    System.out.println("nearestToNoonTime: " + nearestToNoonTime + "cityDetailModel.getDateInProperFormat(): " + cityDetailModel.getDateInProperFormat());
                                     textView = (TextView) activity.findViewById(R.id.day4_textView);
                                     Date date = cityDetailModel.getDateInProperFormat();
                                     textView.setText(new SimpleDateFormat("EEEE").format(date));
@@ -235,19 +254,24 @@ public class GetForcastWeather {
 
                                     textView = (TextView) activity.findViewById(R.id.day4_details_row1_temp_value);
                                     textView.setText(cityDetailModel.getTemp() + " " + SettingsPreference.getSelectedUnitSuffix());
-
+                                }
+                                if( cityDetailModel.getTempHighInDouble() > maxTemp) {
+                                    maxTemp = cityDetailModel.getTempHighInDouble();
                                     textView = (TextView) activity.findViewById(R.id.day4_details_row2_max_temp_value);
                                     textView.setText(cityDetailModel.getTempHigh() + " " + SettingsPreference.getSelectedUnitSuffix());
+                                }
 
+                                if( cityDetailModel.getTempLowInDouble() < minTemp) {
+                                    minTemp = cityDetailModel.getTempLowInDouble();
                                     textView = (TextView) activity.findViewById(R.id.day4_details_row2_min_temp_value);
                                     textView.setText(cityDetailModel.getTempLow() + " " + SettingsPreference.getSelectedUnitSuffix());
                                 }
                                 break;
                             case 4:
-                                System.out.println("nearestToNoonTime: " + nearestToNoonTime + "cityDetailModel.getDateInProperFormat(): " + cityDetailModel.getDateInProperFormat());
-                                if (nearestToNoonTime.compareTo(cityDetailModel.getDateInProperFormat()) <= 0) {
+                                cityDetailModel.printValues();
+                                if (nearestToNoonTime.compareTo(cityDetailModel.getDateInProperFormat()) == 0) {
 
-                                    cityDetailModel.printValues();
+                                    System.out.println("nearestToNoonTime: " + nearestToNoonTime + "cityDetailModel.getDateInProperFormat(): " + cityDetailModel.getDateInProperFormat());
                                     textView = (TextView) activity.findViewById(R.id.day5_textView);
                                     Date date = cityDetailModel.getDateInProperFormat();
                                     textView.setText(new SimpleDateFormat("EEEE").format(date));
@@ -261,10 +285,15 @@ public class GetForcastWeather {
 
                                     textView = (TextView) activity.findViewById(R.id.day5_details_row1_temp_value);
                                     textView.setText(cityDetailModel.getTemp() + " " + SettingsPreference.getSelectedUnitSuffix());
-
+                                }
+                                if( cityDetailModel.getTempHighInDouble() > maxTemp) {
+                                    maxTemp = cityDetailModel.getTempHighInDouble();
                                     textView = (TextView) activity.findViewById(R.id.day5_details_row2_max_temp_value);
                                     textView.setText(cityDetailModel.getTempHigh() + " " + SettingsPreference.getSelectedUnitSuffix());
+                                }
 
+                                if( cityDetailModel.getTempLowInDouble() < minTemp) {
+                                    minTemp = cityDetailModel.getTempLowInDouble();
                                     textView = (TextView) activity.findViewById(R.id.day5_details_row2_min_temp_value);
                                     textView.setText(cityDetailModel.getTempLow() + " " + SettingsPreference.getSelectedUnitSuffix());
                                 }

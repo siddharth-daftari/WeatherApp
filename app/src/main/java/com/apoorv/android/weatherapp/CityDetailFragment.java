@@ -93,7 +93,7 @@ public class CityDetailFragment extends Fragment {
 
                 RelativeLayout relativeLayout = rootView.findViewById(R.id.city_detail_relative_layout);
                 int index = getArguments().getInt(ARG_ITEM_ID);
-                System.out.println("swami: "+index);
+                
                 DefaultList.CityItem cityItem = DefaultList.getCityDetails(this.getContext(), index);
                 System.out.println(cityItem.getCityName());
 
