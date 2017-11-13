@@ -1,27 +1,11 @@
 package com.apoorv.android.weatherapp.helper;
 
-import android.app.Activity;
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.BasicNetwork;
-import com.android.volley.toolbox.HurlStack;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.Cache;
-import com.android.volley.Network;
-import com.android.volley.toolbox.DiskBasedCache;
-
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -52,7 +36,7 @@ public class CallApi {
         String temp ="";
         if(con!=null){
 
-            System.out.println("****** Content of the URL ********");
+            LogHelper.logMessage("Siddharth","****** Content of the URL ********");
             BufferedReader br =
                     new BufferedReader(
                             new InputStreamReader(con.getInputStream()));

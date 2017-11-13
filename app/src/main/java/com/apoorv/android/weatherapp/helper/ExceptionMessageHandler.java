@@ -20,7 +20,7 @@ public class ExceptionMessageHandler {
         {
             message = "Oops! Something Went Wrong";
         }
-        System.out.println("-----> EXCEPTION: " + message + "  -----> context: " + context);
+        LogHelper.logMessage("Siddharth","-----> EXCEPTION: " + message + "  -----> context: " + context);
         e.printStackTrace();
         Toast toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
         toast.show();

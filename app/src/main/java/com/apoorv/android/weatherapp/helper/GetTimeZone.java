@@ -1,8 +1,6 @@
 package com.apoorv.android.weatherapp.helper;
 
 import android.app.Activity;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -10,8 +8,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.apoorv.android.weatherapp.CityListActivity;
-import com.apoorv.android.weatherapp.R;
-import com.apoorv.android.weatherapp.dummy.DefaultList;
+import com.apoorv.android.weatherapp.model.DefaultList;
 import com.google.android.gms.location.places.Place;
 
 import org.json.JSONException;
@@ -47,18 +44,18 @@ public class GetTimeZone {
 
                             HashMap returnHashMap = new HashMap<String, String>();
 
-                            System.out.println(Constants.TIMEZONE_API_PROP_DST_OFFSET + ": " + responseJson.getLong(Constants.TIMEZONE_API_PROP_DST_OFFSET));
-                            System.out.println(Constants.TIMEZONE_API_PROP_RAW_OFFSET + ": " + responseJson.getLong(Constants.TIMEZONE_API_PROP_RAW_OFFSET));
-                            System.out.println(Constants.TIMEZONE_API_PROP_STATUS + ": " + responseJson.getString(Constants.TIMEZONE_API_PROP_STATUS));
-                            System.out.println(Constants.TIMEZONE_API_PROP_TIMEZONE_NAME + ": " + responseJson.getString(Constants.TIMEZONE_API_PROP_TIMEZONE_NAME));
-                            System.out.println(Constants.TIMEZONE_API_PROP_TIMEZONE_ID + ": " + responseJson.getString(Constants.TIMEZONE_API_PROP_TIMEZONE_ID));
+                            LogHelper.logMessage("Siddharth",Constants.TIMEZONE_API_PROP_DST_OFFSET + ": " + responseJson.getLong(Constants.TIMEZONE_API_PROP_DST_OFFSET));
+                            LogHelper.logMessage("Siddharth",Constants.TIMEZONE_API_PROP_RAW_OFFSET + ": " + responseJson.getLong(Constants.TIMEZONE_API_PROP_RAW_OFFSET));
+                            LogHelper.logMessage("Siddharth",Constants.TIMEZONE_API_PROP_STATUS + ": " + responseJson.getString(Constants.TIMEZONE_API_PROP_STATUS));
+                            LogHelper.logMessage("Siddharth",Constants.TIMEZONE_API_PROP_TIMEZONE_NAME + ": " + responseJson.getString(Constants.TIMEZONE_API_PROP_TIMEZONE_NAME));
+                            LogHelper.logMessage("Siddharth",Constants.TIMEZONE_API_PROP_TIMEZONE_ID + ": " + responseJson.getString(Constants.TIMEZONE_API_PROP_TIMEZONE_ID));
 
                             //long newTimeStamp = (timestamp + jsonObject.getLong(TIMEZONE_API_PROP_DST_OFFSET) + jsonObject.getLong(TIMEZONE_API_PROP_RAW_OFFSET)) * 1000;
 
                             DateFormat df = new SimpleDateFormat();
                             df.setTimeZone(TimeZone.getTimeZone(responseJson.getString(Constants.TIMEZONE_API_PROP_TIMEZONE_ID)));
                             Date date = new Date();
-                            System.out.println("Time at is: " + new Date(df.format(date)));
+                            LogHelper.logMessage("Siddharth","Time at is: " + new Date(df.format(date)));
                             df.setTimeZone(Calendar.getInstance().getTimeZone());
 
                             returnHashMap.put(Constants.TIMEZONE_API_PROP_TIMEZONE_ID,responseJson.getString(Constants.TIMEZONE_API_PROP_TIMEZONE_ID));
