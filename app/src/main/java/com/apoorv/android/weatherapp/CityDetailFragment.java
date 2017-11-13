@@ -1,25 +1,18 @@
 package com.apoorv.android.weatherapp;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
 import android.support.design.widget.CustomFab;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toolbar;
 
-import com.apoorv.android.weatherapp.dummy.DefaultList;
-import com.apoorv.android.weatherapp.dummy.DummyContent;
+import com.apoorv.android.weatherapp.model.DefaultList;
 import com.apoorv.android.weatherapp.helper.Constants;
 import com.apoorv.android.weatherapp.helper.ExceptionMessageHandler;
 import com.apoorv.android.weatherapp.helper.GetCurrentWeather;
@@ -30,8 +23,6 @@ import com.apoorv.android.weatherapp.helper.RequestClass;
 
 import org.json.JSONException;
 
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Date;
@@ -71,7 +62,7 @@ public class CityDetailFragment extends Fragment {
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
 
         ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
-        System.out.println("Apoorv actionbar"+actionBar);
+        LogHelper.logMessage("Siddharth","Apoorv actionbar"+actionBar);
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
@@ -93,9 +84,9 @@ public class CityDetailFragment extends Fragment {
 
                 RelativeLayout relativeLayout = rootView.findViewById(R.id.city_detail_relative_layout);
                 int index = getArguments().getInt(ARG_ITEM_ID);
-                
+
                 DefaultList.CityItem cityItem = DefaultList.getCityDetails(this.getContext(), index);
-                System.out.println(cityItem.getCityName());
+                LogHelper.logMessage("Siddharth",cityItem.getCityName());
 
                 if(cityItem != null) {
                     //Setting city name

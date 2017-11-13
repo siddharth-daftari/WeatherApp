@@ -5,25 +5,20 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.HandlerThread;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.os.Handler;
-import android.os.Message;
 import android.widget.Toast;
 
-import com.apoorv.android.weatherapp.dummy.DefaultList;
-import com.apoorv.android.weatherapp.dummy.DummyContent;
+import com.apoorv.android.weatherapp.model.DefaultList;
 import com.apoorv.android.weatherapp.helper.Constants;
 import com.apoorv.android.weatherapp.helper.ExceptionMessageHandler;
 import com.apoorv.android.weatherapp.helper.GetCurrentWeather;
@@ -42,7 +37,6 @@ import org.json.JSONException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 import butterknife.ButterKnife;
  public  class  CityListActivity extends AppCompatActivity {

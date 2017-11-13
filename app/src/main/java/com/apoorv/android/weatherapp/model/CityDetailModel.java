@@ -1,5 +1,7 @@
 package com.apoorv.android.weatherapp.model;
 
+import com.apoorv.android.weatherapp.helper.LogHelper;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -102,7 +104,7 @@ public class CityDetailModel {
     }
 
     public void printValues(){
-        System.out.println("cityName: " + cityName
+        LogHelper.logMessage("Siddharth","cityName: " + cityName
                 + "  weatherStatus: " + weatherStatus
                 + "  temp: " + temp
                 + "  tempHigh: " + tempHigh

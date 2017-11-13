@@ -1,22 +1,18 @@
-package com.apoorv.android.weatherapp.dummy;
+package com.apoorv.android.weatherapp.model;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import com.apoorv.android.weatherapp.CityListActivity;
 import com.apoorv.android.weatherapp.helper.Constants;
-import com.apoorv.android.weatherapp.helper.GetCurrentWeather;
 import com.apoorv.android.weatherapp.helper.GetTimeZone;
 import com.apoorv.android.weatherapp.helper.LogHelper;
 import com.apoorv.android.weatherapp.helper.RequestClass;
-import com.apoorv.android.weatherapp.helper.SettingsPreference;
 import com.google.android.gms.location.places.Place;
 
 import org.json.JSONException;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,15 +20,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.TimeZone;
-
-import android.os.Handler;
-import android.os.Message;
-import android.os.Looper;
-import android.widget.TextView;
-import android.widget.Toast;
 
 /**
  * Created by apoorv.mehta on 10/28/17.
@@ -75,7 +64,7 @@ public class DefaultList {
             //for each city string in return set, construct a cityItem PoJo and add to the static list.
             String [] citydetails = s.split("@");
             LogHelper.logMessage("Apoorv", "Got a city from database, adding it to the list");
-            System.out.println(citydetails[7]);
+            LogHelper.logMessage("Siddharth",citydetails[7]);
             CityItem city1 = new CityItem(citydetails[0],citydetails[1],citydetails[2],citydetails[3],citydetails[4],citydetails[5],citydetails[6],citydetails[7]);
             addItem(city1);
             citiesset.add(city1.getDelimitedString());
@@ -215,7 +204,7 @@ public class DefaultList {
         }
 
         public String getUniqueDelimitedString() {
-            return name+"@"+description+"@"+latitude+"@"+longitude+"@"+isCurrent+"@"+timeZone+"@"+cityId;
+            return name+"@"+description+"@"+latitude+"@"+longitude+"@"+timeZone+"@"+cityId;
         }
 
         public String getDelimitedString() {
